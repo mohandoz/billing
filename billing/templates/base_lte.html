@@ -1,0 +1,686 @@
+{% load static i18n %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{% block title %}{% endblock title %}</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+  <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
+
+
+  {% block css %}
+
+    <!-- Latest compiled and minified Bootstrap 4.1.1 CSS -->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <!-- Your stuff: Third-party CSS libraries go here -->
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'admin_lte/dist/css/adminlte.min.css' %}">
+
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{% static 'admin_lte/plugins/iCheck/flat/blue.css' %}">
+
+
+
+    <!-- jvectormap -->
+    <link rel="stylesheet" href="{% static 'admin_lte/plugins/jvectormap/jquery-jvectormap-1.2.2.css' %}">
+
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="{% static 'admin_lte/plugins/datepicker/datepicker3.css' %}">
+
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href={% static 'admin_lte/plugins/daterangepicker/daterangepicker-bs3.css' %}>
+
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet" href="{% static 'admin_lte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css' %}">
+
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <!-- This file stores project-specific CSS -->
+
+    <link href="{% static 'css/project.css' %}" rel="stylesheet">
+
+  {% endblock %}
+
+  {% block head %}
+
+  {% endblock head %}
+</head>
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+      </li>
+      {% if request.user.is_authenticated %}
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="" class="nav-link ">Home</a>
+        </li>
+      {% else %}
+        <a href="{% url 'home' %}" class="nav-link">Home</a>
+
+      {% endif %}
+
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Contact</a>
+      </li>
+
+      {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          {# URL provided by django-allauth/account/urls.py #}
+          <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+        </li>
+
+      {% else %}
+
+        <li class="nav-item">
+          {# URL provided by django-allauth/account/urls.py #}
+          <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+        </li>
+        <li class="nav-item">
+        {# URL provided by django-allauth/account/urls.py #}
+        <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+
+      {% endif %}
+
+    </ul>
+
+
+    <!-- SEARCH FORM -->
+    <form class="form-inline ml-3">
+      <div class="input-group input-group-sm">
+        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+        <div class="input-group-append">
+          <button class="btn btn-navbar" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Messages Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="fas fa-comments-o"></i>
+          <span class="badge badge-danger navbar-badge">3</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="{% static 'images/favicons/favicon.ico' %}" alt="User Avatar"
+                   class="img-size-50 mr-3 img-circle">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Brad Diesel
+                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">Call me whenever you can...</p>
+                <p class="text-sm text-muted"><i class="fas fa-clock-o mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="{% static 'images/favicons/favicon.ico' %}" alt="User Avatar"
+                   class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  John Pierce
+                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">I got your message bro</p>
+                <p class="text-sm text-muted"><i class="fas fa-clock-o mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="{% static 'images/favicons/favicon.ico' %}" alt="User Avatar"
+                   class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Nora Silvester
+                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">The subject goes here</p>
+                <p class="text-sm text-muted"><i class="fas fa-clock-o mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+        </div>
+      </li>
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="fas fa-bell-o"></i>
+          <span class="badge badge-warning navbar-badge">15</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-item dropdown-header">15 Notifications</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 4 new messages
+            <span class="float-right text-muted text-sm">3 mins</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-users mr-2"></i> 8 friend requests
+            <span class="float-right text-muted text-sm">12 hours</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-file mr-2"></i> 3 new reports
+            <span class="float-right text-muted text-sm">2 days</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i
+          class="fas fa-th-large"></i></a>
+      </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  {% if request.user.is_authenticated %}
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Brand Logo -->
+      <a href="" class="brand-link">
+        <img src="{% static 'images/favicons/favicon.ico' %}" alt="AdminLTE Logo"
+             class="brand-image img-circle elevation-3"
+             style="opacity: .8">
+        <span class="brand-text font-weight-light">WoW</span>
+      </a>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="image">
+            {#          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">#}
+            <img src="{% static 'images/favicons/favicon.ico' %}" class="img-circle elevation-2" alt="User Image">
+
+          </div>
+          <div class="info">
+            <a href="{% url 'users:detail' request.user.username %}"
+               class="fas fa-user d-block"> {{ request.user.username }}</a>
+          </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+                 with font-awesome or any other icon font library -->
+
+            <li class="nav-item">
+              <a href=""
+                 class="nav-link {% if request.resolver_match.url_name  == 'dashboard' %}active{% endif %}">
+                <i class="fas fa-tachometer-alt nav-icon"></i>
+                <p>Dashboard</p>
+              </a>
+            </li>
+
+            <li class="nav-item has-treeview {% active_menu request "search register" %}">
+              <a href="#" class="nav-link {% active request "search register" %}">
+                <i class="nav-icon fas fa-home"></i>
+                <p>
+                  Reception
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+
+                <li class="nav-item">
+                  <a href="" class="nav-link">
+                    <i class="fas fa-user-plus nav-icon"></i>
+                    <p>Register</p>
+                  </a>
+                </li>
+
+                <li class="nav-item ">
+                  <a href="" class="nav-link">
+                    <i class="fas fa-search nav-icon"></i>
+                    <p>Search</p>
+                  </a>
+                </li>
+
+
+              </ul>
+            </li>
+            <li
+              class="nav-item has-treeview">
+              <a href="#" class="nav-link ">
+                <i class="nav-icon fas fa-users"></i>
+                <p>
+                  Visits
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+
+                <li class="nav-item">
+                  <a href="" class="nav-link">
+                    <i class="far fa-calendar-alt nav-icon"></i>
+                    <p>
+                      All visits
+                      {#                      <span class="badge badge-info right">7</span>#}
+                    </p>
+                  </a>
+                </li>
+
+
+                <li class="nav-item">
+                  <a href="" class="nav-link  ">
+                    <i class="far fa-calendar-check nav-icon"></i>
+                    <p>
+                      Active visits
+                      {#                      <span class="badge badge-success right">2</span>#}
+                    </p>
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a href="" class="nav-link ">
+                    <i class="far fa-calendar-times nav-icon"></i>
+                    <p>
+                      Overdue visits
+                      {#                      <span class="badge badge-danger right">5</span>#}
+                    </p>
+                  </a>
+                </li>
+
+              </ul>
+            </li>
+            <li class="nav-item has-treeview ">
+              <a href="#" class="nav-link  ">
+                <i class="nav-icon fas fa-star"></i>
+                <p>
+                  Events
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+
+
+                <li class="nav-item">
+                  <a href="" class="nav-link">
+                    <i class="fas fa-list nav-icon"></i>
+                    <p>List Events</p>
+                  </a>
+                </li>
+
+                {% if request.user.is_superuser %}
+                  <li class="nav-item">
+                    <a href="" class="nav-link ">
+                      <i class="far fa-calendar-alt nav-icon"></i>
+                      <p>Create Event</p>
+                    </a>
+                  </li>
+                {% endif %}
+
+                {#                <li class="nav-item">#}
+                {#                  <a href="pages/forms/editors.html" class="nav-link">#}
+                {#                    <i class="fas fa-circle-o nav-icon"></i>#}
+                {#                    <p>All events</p>#}
+                {#                  </a>#}
+                {#                </li>#}
+
+              </ul>
+            </li>
+
+            {% if request.user.is_superuser %}
+
+              <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-birthday-cake"></i>
+                  <p>
+                    Birthday
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  {#                <li class="nav-item">#}
+                  {#                  <a href="pages/tables/simple.html" class="nav-link">#}
+                  {#                    <i class="fas fa-gifts nav-icon"></i>#}
+                  {#                    <p>Register birthday</p>#}
+                  {#                  </a>#}
+                  {#                </li>#}
+
+                  <li class="nav-item">
+                    <a href="" class="nav-link">
+                      <i class="fas fa-child nav-icon"></i>
+                      <p>List Birthday</p>
+                    </a>
+                  </li>
+
+
+                </ul>
+              </li>
+            {% endif %}
+
+            <li class="nav-item has-treeview {% active_menu request "school_list school_register school_visit_list" %}">
+              <a href="#" class="nav-link  {% active request "school_list school_register school_visit_list" %}">
+                <i class="nav-icon fas fa-school"></i>
+                <p>
+                  Schools
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+
+              <ul class="nav nav-treeview">
+
+                {% if request.user.is_superuser %}
+
+                  <li class="nav-item">
+                    <a href="" class="nav-link">
+                      <i class="fas fa-search nav-icon"></i>
+                      <p>All Schools</p>
+                    </a>
+                  </li>
+                {% endif %}
+
+                <li class="nav-item">
+                  <a href="" class="nav-link">
+                    <i class="far fa-plus-square nav-icon"></i>
+                    <p>Register School</p>
+                  </a>
+                </li>
+
+                {% if request.user.is_superuser %}
+
+                  <li class="nav-item">
+                    <a href="" class="nav-link">
+                      <i class="fas fa-user-graduate nav-icon"></i>
+                      <p>Active School Visit</p>
+                    </a>
+                  </li>
+                {% endif %}
+
+              </ul>
+            </li>
+
+            {% if request.user.is_superuser %}
+
+              <li class="nav-header">Admin</li>
+
+              <li
+                class="nav-item has-treeview ">
+                <a href="#"
+                   class="nav-link">
+                  <i class="fas fa-cogs"></i>
+                  <p>
+                    Settings
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+
+                  <li class="nav-item ">
+                    <a href="" class=" nav-link">
+                      <i class="fas fa-bars nav-icon"></i>
+                      <p>General</p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href=""
+                       class="{% active request "plan_create plan_edit plan_list" %} nav-link">
+                      <i class="fas fa-solar-panel nav-icon"></i>
+                      <p>Plans</p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href=""
+                       class="nav-link">
+                      <i class="fas fa-money-bill-wave nav-icon"></i>
+                      <p>Extra</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <li
+                class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-trash"></i>
+                  <p>
+                    Deleted
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+
+                  <li class="nav-item">
+                    <a href="" class="nav-link ">
+                      <i class="far fa-calendar-times nav-icon"></i>
+                      <p>
+                        Visit
+                      </p>
+                    </a>
+                  </li>
+
+
+                  <li class="nav-item">
+                    <a href="" class="nav-link">
+                      <i class="far fa-calendar-times nav-icon"></i>
+                      <p>
+                        Event
+                      </p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href=""
+                       class="nav-link">
+                      <i class="far fa-calendar-times nav-icon"></i>
+                      <p>
+                        Event Visit
+                      </p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href=""
+                       class="nav-link ">
+                      <i class="far fa-calendar-times nav-icon"></i>
+                      <p>
+                       Birthday
+                      </p>
+                    </a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href=""
+                       class="nav-link">
+                      <i class="far fa-calendar-times nav-icon"></i>
+                      <p>
+                        School Visit
+                      </p>
+                    </a>
+                  </li>
+
+                </ul>
+              </li>
+
+            {% endif %}
+
+
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark legend">{% block content_header %} {% endblock %}</h1>
+
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="">Home</a></li>
+              <li class="breadcrumb-item active">{% block content_right_active %} {% endblock %}</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+  {% endif %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message | safe }}</div>
+    {% endfor %}
+  {% endif %}
+
+
+  <!-- Main content -->
+  <section class="content">
+    {% block content %}
+
+    {% endblock content %}
+  </section>
+  <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    {#    <strong>Copyright &copy; 2014-2018 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>#}
+    {#    All rights reserved.#}
+    {#    <div class="float-right d-none d-sm-inline-block">#}
+    {#      <b>Version</b> 3.0.0-alpha#}
+</div>
+</footer>
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+  <!-- Control sidebar content goes here -->
+</aside>
+<!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+{% block javascript %}
+
+  <!-- jQuery -->
+  {#<script src="{% static 'admin_lte/plugins/jquery/jquery.min.js' %}"></script>#}
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+          integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+          crossorigin="anonymous"></script>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+          integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+          crossorigin="anonymous"></script>z
+
+  <!-- jQuery UI 1.11.4 -->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+  <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+  <script>
+    $.widget.bridge('uibutton', $.ui.button)
+  </script>
+
+  <!-- Bootstrap 4 -->
+  {#<script src="{% static 'admin_lte/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>#}
+
+
+  <!-- Your stuff: Third-party javascript libraries go here -->
+
+  <!-- Sparkline -->
+  <script src="{% static 'admin_lte/plugins/sparkline/jquery.sparkline.min.js' %}"></script>
+
+  <!-- jvectormap -->
+  <script src="{% static 'admin_lte/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js' %}"></script>
+  <script src="{% static 'admin_lte/plugins/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+
+  <!-- jQuery Knob Chart -->
+  <script src="{% static 'admin_lte/plugins/knob/jquery.knob.js' %}"></script>
+
+  <!-- daterangepicker -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+  <script src="{% static 'admin_lte/plugins/daterangepicker/daterangepicker.js' %}"></script>
+
+  <!-- datepicker -->
+  <script src="{% static 'admin_lte/plugins/datepicker/bootstrap-datepicker.js' %}"></script>
+
+  <!-- Bootstrap WYSIHTML5 -->
+  <script src="{% static 'admin_lte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js' %}"></script>
+
+  <!-- Slimscroll -->
+  <script src="{% static 'admin_lte/plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
+
+  <!-- FastClick -->
+  <script src="{% static 'admin_lte/plugins/fastclick/fastclick.js' %}"></script>
+
+  <!-- AdminLTE App -->
+  <script src="{% static 'admin_lte/dist/js/adminlte.js' %}"></script>
+
+
+
+  <!-- place project specific Javascript in this file -->
+  <script src="{% static 'js/project.js' %}"></script>
+
+{% endblock javascript %}
+
+
+
+{% block js %} {% endblock js %}
+
+</body>
+</html>
