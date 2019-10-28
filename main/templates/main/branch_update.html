@@ -1,0 +1,36 @@
+{% extends 'base_lte.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% load custom_tags %}
+{% load crispy_forms_tags %}
+
+
+{% block title %} تعديل {{ object }} {% endblock title %}
+{% block content_header %} تعديل {{ object }} {% endblock %}
+{% block content_right_active %} تعديل {{ object }} {% endblock %}
+
+{% block content %}
+
+  <div class="card">
+    <div class="card-body">
+      <form method="post">{% csrf_token %}
+        {{ form | crispy }}
+        <input type="submit" value="اضافة">
+      </form>
+    </div>
+  </div>
+
+
+{% endblock content %}
+
+
+{% block js %}
+  <script>
+    var csrf_token = '{{ csrf_token }}';
+
+
+  </script>
+
+  <script type="text/javascript" src="{% static 'js/reception.js' %}"></script>
+
+{% endblock js %}

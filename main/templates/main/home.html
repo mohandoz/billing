@@ -1,7 +1,221 @@
 {% extends 'base_lte.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% load custom_tags %}
+
+
+{% block title %}الشركات{% endblock title %}
+{% block content_header %}الشركات{% endblock %}
+{% block content_right_active %}الشركات{% endblock %}
 
 {% block content %}
-  <h1> hi </h1>
+  <div class="card">
+    <form class="card-body" id="search-form" method="get">
+      <div class="well">
+        <h4 style="margin-top: 0">بحث</h4>
+        <div class="row">
 
+          <div class="form-group col-sm-4 col-md-3">
+            {{ filter.form.name.label_tag }}
+            {% render_field filter.form.name class="form-control" %}
+          </div>
+
+          <div class="form-group col-sm-4 col-md-3 ">
+            <div class="">
+              <label for="search-number">النتائج</label>
+              <select class="form-control" id="search-option" name="search-option">
+                <option value="{{ search_option }}"> #{{ search_option }}</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div class="row">
+          <div class="form-group col-sm-2 col-md-2">
+            {#            <button type="submit" class="btn btn-success">#}
+            {#              <i class="fas fa-search align-left"></i> بحث#}
+            <input type="submit" class="btn btn-success fas fa-search" id="reset" value="بحث  "/>
+            {#            </button>#}
+          </div>
+
+          <div class="form-group col-sm-2 col-md-2">
+            <input type="button" class="btn btn-secondary fas fa-broom" id="reset" value=" Reset"/>
+          </div>
+
+          <div class="form-group col-sm-2 col-md-2">
+            <input type="button" class="btn btn-primary float-left submit-button fas fa-users"
+                   value=" اضافة شركة"
+                   onclick="location='{% url "company-create" %}'">
+          </div>
+        </div>
+      </div>
+
+
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <table class="table table-bordered  table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th>اسم الشركة</th>
+          <th>Last name</th>
+          <th>Phone</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for company in response %}
+          <tr>
+            <th scope="row"> {{ forloop.counter }} </th>
+            <td> <a class="second after" href="{% url "company-detail" company.uid %}">{{ company.name }}</a></td>
+            <td>{{ parent.last_name }}</td>
+            <td>{{ parent.phone }}</td>
+
+
+            <td>
+
+
+              <!-- Button to Open the Modal -->
+              <input type="button" data-toggle="modal" data-target="#parent-modal-{{ parent.uid }}" value=""
+                     class="fas fa-cog btn btn-default my-modal-wrapper">
+
+              <!-- the Modal -->
+              <div class="modal fade in" id="parent-modal-{{ parent.uid }}" tabindex="-1" role="dialog"
+                   aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                <div class="modal-dialog modal-dialog-centered" role="document">
+
+                  <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                      <h5 class="modal-title">{{ parent.first_name }} {{ parent.last_name }}</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+
+                      <table class="table table-bordered  table-striped table-hover">
+                        <thead class="thead-dark">
+                        <tr>
+                          <th>تعديل</th>
+                          <th>الافرع</th>
+                          <th>جميع الفواتير</th>
+                          <th>Event</th>
+                          {% if request.user.is_superuser %}
+                            <th>Birthday</th>
+                          {% endif %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                          <td>
+                            <input type="button" name="profile" value="&#xf007"
+                                   class="fas fa-user btn btn-sm btn-primary"
+                                   onclick="location='{% url 'company-detail' company.uid %}'">
+                          </td>
+
+                          <td>
+                            <input type="button" name="whatsapp" value="&#xf232"
+                                   class="fab fa-whatsapp btn btn-sm btn-success"
+                                   onclick=" window.open('{{ parent.whatsapp }}', '_blank'); return false;">
+                          </td>
+
+                          <td>
+                            <input type="button" name="visit" value="" class="fas fa-child btn btn-sm btn-warning"
+                                   onclick="location='visit_start/{{ parent.uid }}'">
+                          </td>
+
+                          <td>
+                            <input type="button" name="event" value="" class="fas fa-star btn btn-sm btn-info"
+                                   onclick="location='event_visit/{{ parent.uid }}'">
+                          </td>
+                          {% if request.user.is_superuser %}
+                            <td>
+                              <input type="button" name="birthday" value=""
+                                     class="fas fa-birthday-cake btn btn-sm btn-dark"
+                                     onclick="location='birthday_register/{{ parent.uid }}'">
+                            </td>
+                          {% endif %}
+                        </tr>
+
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            </td>
+
+
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="20">لا يوجد بيانات</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+    <div class="pagination align-self-center">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          {% if response.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ response.previous_page_number }}">&laquo;</a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link disabled">&laquo;</a></li>
+          {% endif %}
+          {% for i in response.paginator.page_range %}
+            {% if response.number == i %}
+              <li class="page-item active"><a class="page-link">{{ i }}</a></li>
+
+            {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if response.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ response.next_page_number }}">&raquo;</a></li>
+
+          {% else %}
+            <li class="page-item"><a class="page-link disabled">&raquo;</a></li>
+          {% endif %}
+
+
+        </ul>
+      </nav>
+    </div>
+  </div>
 {% endblock content %}
 
+
+{% block js %}
+  <script>
+    var csrf_token = '{{ csrf_token }}';
+    {#var register_url = "{% url "register" %}"#}
+
+
+  </script>
+
+  <script type="text/javascript" src="{% static 'js/reception.js' %}"></script>
+
+{% endblock js %}

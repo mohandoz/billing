@@ -1,0 +1,256 @@
+{% extends 'base_lte.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% load custom_tags %}
+
+
+{% block title %} شركة {{ object }}{% endblock title %}
+{% block content_header %} شركة{{ object }} {% endblock %}
+{% block content_right_active %} شركة{{ object }}{% endblock %}
+
+{% block content %}
+
+
+
+  <div class="card">
+    <div class="card-body">
+      <table class="table table-bordered  table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+          <th>اسم الشركة</th>
+          <th>تاريخ</th>
+          <th>الخيارات</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+
+          <td>{{ company.name }}</td>
+
+          <td>{{ company.created | date:"Y/n/j  l" }}</td>
+
+
+          <td>
+
+
+            <!-- Button to Open the Modal -->
+            <input type="button" data-toggle="modal" data-target="#company-modal-{{ company.uid }}" value=""
+                   class="fas fa-cog btn btn-default my-modal-wrapper">
+
+            <!-- the Modal -->
+            <div class="modal fade in" id="company-modal-{{ company.uid }}" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+              <div class="modal-dialog modal-dialog-centered" role="document">
+
+                <div class="modal-content">
+
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h5 class="modal-title">{{ company.first_name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <!-- Modal Body -->
+                  <div class="modal-body">
+
+                    <table class="table table-bordered  table-striped table-hover">
+                      <thead class="thead-dark">
+                      <tr>
+                        <th>تعديل</th>
+                        <th>اضافة فرع</th>
+                        <th>جميع الفواتير</th>
+                        <th>انشاءفاتورة</th>
+                        {% if request.user.is_superuser %}
+                          <th>Birthday</th>
+                        {% endif %}
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td>
+                          <input type="button" name="profile" value=""
+                                 class="fas fa-tools btn btn-sm btn-primary"
+                                 onclick="location='{% url 'company-update' company.uid %}'">
+                        </td>
+
+                        <td>
+                          <input type="button" name="whatsapp" value="&#xf232"
+                                 class="fab fa-whatsapp btn btn-sm btn-success"
+                                 onclick="location='{% url 'branch-create' company.uid %}'">
+                        </td>
+
+                        <td>
+                          <input type="button" name="visit" value="" class="fas fa-child btn btn-sm btn-warning"
+                                 onclick="location='visit_start/{{ parent.uid }}'">
+                        </td>
+
+                        <td>
+                          <input type="button" name="event" value="" class="fas fa-star btn btn-sm btn-info"
+                                 onclick="location='{% url 'invoice-create' company.uid %}'">
+                        </td>
+                        {% if request.user.is_superuser %}
+                          <td>
+                            <input type="button" name="birthday" value=""
+                                   class="fas fa-birthday-cake btn btn-sm btn-dark"
+                                   onclick="location='birthday_register/{{ parent.uid }}'">
+                          </td>
+                        {% endif %}
+                      </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Modal Footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </td>
+
+
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+
+  <div class="card">
+    <div class="card-body">
+      <table class="table table-bordered  table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+          <th>اسم الفرع</th>
+          <th>تاريخ</th>
+          <th>الخيارات</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for branch in branches %}
+
+
+          <tr>
+
+            <td>{{ branch.name }}</td>
+
+
+            <td>{{ branch.created | date:"Y/n/j  l" }}</td>
+
+            <td>
+
+
+              <!-- Button to Open the Modal -->
+              <input type="button" data-toggle="modal" data-target="#parent-modal-{{ branch.uid }}" value=""
+                     class="fas fa-cog btn btn-default my-modal-wrapper">
+
+              <!-- the Modal -->
+              <div class="modal fade in" id="parent-modal-{{ branch.uid }}" tabindex="-1" role="dialog"
+                   aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                <div class="modal-dialog modal-dialog-centered" role="document">
+
+                  <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                      <h5 class="modal-title">{{ branch.name }}</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+
+                      <table class="table table-bordered  table-striped table-hover">
+                        <thead class="thead-dark">
+                        <tr>
+                          <th>تعديل</th>
+                          <th>الافرع</th>
+                          <th>جميع الفواتير</th>
+                          <th>فاتورة جديدة</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                          <td>
+                            <input type="button" name="profile" value=""
+                                   class="fas fa-tools btn btn-sm btn-primary"
+                                   onclick="location='{% url 'branch-update' branch.uid %}'">
+                          </td>
+
+                          <td>
+                            <input type="button" name="whatsapp" value="&#xf232"
+                                   class="fab fa-whatsapp btn btn-sm btn-success"
+                                   onclick=" window.open('{{ parent.whatsapp }}', '_blank'); return false;">
+                          </td>
+
+                          <td>
+                            <input type="button" name="visit" value="" class="fas fa-child btn btn-sm btn-warning"
+                                   onclick="location='visit_start/{{ parent.uid }}'">
+                          </td>
+
+                          <td>
+                            <input type="button" name="event" value="" class="fas fa-star btn btn-sm btn-info"
+                                   onclick="location='{% url 'invoice-create' branch.uid %}'">
+                          </td>
+                        </tr>
+
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            </td>
+
+
+          </tr>
+
+        {% empty %}
+          <tr>
+            <td>
+              لا يوجد افرع
+            </td>
+          </tr>
+
+
+        {% endfor %}
+        </tbody>
+
+      </table>
+
+    </div>
+  </div>
+
+{% endblock content %}
+
+
+{% block js %}
+  <script>
+    var csrf_token = '{{ csrf_token }}';
+    {#var register_url = "{% url "register" %}"#}
+
+
+  </script>
+
+  <script type="text/javascript" src="{% static 'js/reception.js' %}"></script>
+
+{% endblock js %}

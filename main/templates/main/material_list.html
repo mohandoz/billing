@@ -1,0 +1,87 @@
+{% extends 'base_lte.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% load custom_tags %}
+
+
+{% block title %}المواد{% endblock title %}
+{% block content_header %}المواد {% endblock %}
+{% block content_right_active %} شركةالمواد {% endblock %}
+
+{% block content %}
+
+
+
+  <div class="card">
+    <div class="card-body">
+      <input type="button" value=" اضافة مادة جديدة" class="fas fa-plus-square btn btn-success my-modal-wrapper"
+             onclick="location='{% url 'material-create' %}'">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <table class="table table-bordered  table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+          <th>اسم المادة</th>
+          <th>الحالة</th>
+          <th>تعديل</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for object in object_list %}
+
+
+          <tr>
+
+            <td>{{ object.name }}</td>
+
+
+            <td>{% if object.status == 1 %}
+              <span class="badge badge-success">فعال</span>
+            {% else %}
+              <span class="badge badge-danger">غير فعال</span>
+            {% endif %}
+            </td>
+
+            <td>
+
+
+              <input type="button" value="" class="fas fa-cog btn btn-default my-modal-wrapper"
+                     onclick="location='{% url 'material-update' object.uid %}'">
+
+            </td>
+
+          </tr>
+
+        {% empty %}
+          <tr>
+            <td>
+              لا يوجد مواد
+            </td>
+          </tr>
+
+
+        {% endfor %}
+        </tbody>
+
+      </table>
+
+    </div>
+  </div>
+
+{% endblock content %}
+
+
+{% block js %}
+  <script>
+    var csrf_token = '{{ csrf_token }}';
+    {#var register_url = "{% url "register" %}"#}
+
+
+  </script>
+
+  <script type="text/javascript" src="{% static 'js/reception.js' %}"></script>
+
+{% endblock js %}

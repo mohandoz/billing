@@ -11,3 +11,35 @@
   background-color: #f2dede;
   border-color: #eed3d7;
 }
+
+.alert{
+   z-index: 30;
+}
+
+/*
+  THE IMPORTANT STUFF IS BELOW
+*/
+  .rtl {
+    direction: rtl;
+    text-align: right;
+    /*&[class*="col-"] {*/
+      /*float: left !important;*/
+    /*}*/
+  }
+
+    .ltr {
+    direction: ltr;
+    text-align: right;
+    /*&[class*="col-"] {*/
+      /*float: left !important;*/
+    /*}*/
+  }
+
+  .card { background-color: rgba(245, 245, 245, 0.8) !important; }
+
+  .msg {
+    padding-top: 10px;
+  }
+
+
+  /*Href*/
