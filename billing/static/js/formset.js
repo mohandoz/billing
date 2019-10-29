@@ -2,8 +2,8 @@ $(function () {
 
 
     $('.link-formset').formset({
-        addText: 'Add Kid',
-        deleteText: 'Remove Kid'
+        addText: 'اضافة مادة',
+        deleteText: 'حذف'
     });
 
 

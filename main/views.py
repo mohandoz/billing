@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.views import generic
 from .choices import *
 # from .forms import MaterialForm, MaterlModelFormset
-from .forms import InvoiceMaterialForm, InvoiceMaterialFormSet
+from .forms import InvoiceMaterialForm, InvoiceMaterialFormSet, MaterialForm
 from django.db import transaction
 
 
@@ -138,30 +138,11 @@ class MaterialUpdateView(generic.UpdateView):
     slug_url_kwarg = 'uid'
 
 
-# class InvoiceCreateView(generic.CreateView):
-#     model = Invoice
-#     fields = ["invoice_number", ]
-#     # form_class = MaterlModelFormset
-#
-#
-#     def dispatch(self, request, *args, **kwargs):
-#         branch = kwargs.get("uid")
-#         self.branch = get_object_or_404(Branch, uid=branch)
-#         return super().dispatch(request, *args, **kwargs)
-#
-#     def form_valid(self, form):
-#         form.instance.branch = self.branch
-#         return super().form_valid(form)
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(InvoiceCreateView, self).get_context_data(**kwargs)
-#         context['formset'] = MaterlModelFormset()
-#         return context
 
 class InvoiceCreateView(generic.CreateView):
-    model = Invoice
-    fields = ["invoice_number", ]
-    # form_class = MaterlModelFormset
+    model = InvoiceMaterial
+    fields = ["material", "qtn", "price", "delivery_date", "output_number"]
+    template_name = 'main/invoice_form.html'
 
 
     def dispatch(self, request, *args, **kwargs):
@@ -169,26 +150,38 @@ class InvoiceCreateView(generic.CreateView):
         self.branch = get_object_or_404(Branch, uid=branch)
         return super().dispatch(request, *args, **kwargs)
 
-    # def form_valid(self, form):
-    #     form.instance.branch = self.branch
-    #     print(self.request.POST)
-    #     return super().form_valid(form)
 
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
+
+        branch_uid = self.kwargs.get("uid")
+        branch = get_object_or_404(Branch, uid=branch_uid)
+
+
         with transaction.atomic():
-            form.instance.created_by = self.request.user
-            self.object = form.save()
+            from uuid import uuid4
+            x = str(uuid4())
+            invoice = Invoice.objects.create(branch=self.branch, invoice_number=x[:5])
+
+            form.instance.invoice = invoice
+
             if formset.is_valid():
                 formset.instance = self.object
                 formset.save()
-        return super(InvoiceCreateView, self).form_valid(form)
+            else:
+                print(formset.errors)
+
+                return self.form_invalid(formset)
+
+
+
+            return super().form_valid(form)
+
 
     def get_context_data(self, **kwargs):
         context = super(InvoiceCreateView, self).get_context_data(**kwargs)
         if self.request.POST:
-            print(self.request.POST)
             context['formset'] = InvoiceMaterialFormSet(self.request.POST)
         else:
             context['formset'] = InvoiceMaterialFormSet()
