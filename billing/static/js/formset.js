@@ -2,7 +2,7 @@ $(function () {
 
 
     $('.link-formset').formset({
-        addText: 'اضافة مادة',
+        addText: 'Add Material',
         deleteText: 'حذف'
     });
 

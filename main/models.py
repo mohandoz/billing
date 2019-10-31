@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-import uuid
 
 from model_utils.models import TimeStampedModel
 from django.urls import reverse
@@ -58,8 +57,9 @@ class Material(TimeStampedModel):
 
 class Invoice(TimeStampedModel):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    created_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name="invoices")
-    # todo it
+    material = models.ManyToManyField(Material, related_name="invoices")
     invoice_number = models.CharField(max_length=20, unique=True)
     print_count = models.PositiveIntegerField(default=0)
 
@@ -74,23 +74,23 @@ class Invoice(TimeStampedModel):
 
 
     def get_absolute_url(self):
-        return reverse("home")
+        return reverse("invoice-detail", args=[str(self.uid)])
 
     def __str__(self):
         return f"{self.branch.name} - {self.invoice_number}"
 
 
-class InvoiceMaterial(TimeStampedModel):
+class MaterialOrder(TimeStampedModel):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="invoice_materials")
-    material = models.ForeignKey(Material, on_delete=models.CASCADE, related_name="invoice_materials")
-    qtn = models.PositiveIntegerField()
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, related_name="material_orders")
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="material_orders")
+    quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
     delivery_date = models.DateField()
     output_number = models.PositiveIntegerField()
 
     def get_absolute_url(self):
-        return reverse("home")
+        return reverse("material-order-detail",  args=[str(self.uid)])
 
     def __str__(self):
-        return f"{self.material.name}"
+        return f"{self.material.name} - {self.invoice.invoice_number}"

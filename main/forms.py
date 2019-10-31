@@ -1,8 +1,8 @@
 from django import forms
 from django.forms import ModelForm, modelformset_factory
-from .models import Company, Branch, Material, Invoice, InvoiceMaterial
+from .models import Company, Branch, Material, Invoice, MaterialOrder
 from django.forms.models import inlineformset_factory
-
+from django.forms import BaseInlineFormSet
 # https://dev.to/zxenia/django-inline-formsets-with-class-based-views-and-crispy-forms-14o6
 
 #=================== material form ==========================
@@ -66,22 +66,28 @@ class MaterialForm(ModelForm):
 
 
 
-class InvoiceMaterialForm(ModelForm):
-    mat = forms.ModelChoiceField(Material.objects.all(), empty_label='None', required=False, label='المادة')
+class MaterialOrderForm(ModelForm):
+    # material = forms.ModelChoiceField(Material.objects.all(), empty_label='None', required=False, label='المادة')
 
 
     class Meta:
-        model = InvoiceMaterial
-        fields = ('mat', 'qtn', 'price', 'delivery_date', 'output_number')
+        model = MaterialOrder
+        fields = ('qtn', 'price', 'delivery_date', 'output_number')
+
+    # def __init__(self, *args, **kwargs):
+    #     super(InvoiceMaterialForm, self).__init__(*args, **kwargs)
+    #     self.fields['material'].queryset = Material.objects.all()
 
 
     # make sure the that form is not empty
-    # def __init__(self, *arg, **kwarg):
-    #     super(InvoiceMaterialForm, self).__init__(*arg, **kwarg)
-    #     self.empty_permitted = False
+    def __init__(self, *arg, **kwarg):
+        super(MaterialOrderForm, self).__init__(*arg, **kwarg)
+        self.empty_permitted = False
 
 
+ # fields=[ 'qtn', 'price', 'delivery_date', 'output_number'],
 InvoiceMaterialFormSet = inlineformset_factory(
-    Material, InvoiceMaterial, form=InvoiceMaterialForm,
-    fields=['mat', 'qtn', 'price', 'delivery_date', 'output_number'], extra=1, can_delete=True
+    Material, MaterialOrder, form=MaterialOrderForm, fields=[ 'qtn', 'price', 'delivery_date', 'output_number'],
+   extra=1, can_delete=True # fields for child thats why no material
     )
+

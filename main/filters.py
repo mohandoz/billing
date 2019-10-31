@@ -1,4 +1,4 @@
-from .models import Company, Branch, Invoice, InvoiceMaterial
+from .models import Company, Branch, Invoice, MaterialOrder
 import django_filters
 
 # https://simpleisbetterthancomplex.com/tutorial/2016/11/28/how-to-filter-querysets-dynamically.html

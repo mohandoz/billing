@@ -12,107 +12,148 @@
 {% block content %}
 
 
-  {#    <div class="card">#}
-  {#    <div class="card-body">#}
-  {#      <form method="post">{% csrf_token %}#}
-  {#        {{ form | crispy }}#}
-  {#        <input type="submit" value="اضافة">#}
-  {#      </form>#}
-  {#    </div>#}
+{#      <div class="card">#}
+{#      <div class="card-body">#}
+{#        <form method="post">{% csrf_token %}#}
+{#          {{ form | crispy }}#}
+{#          <input type="submit" value="اضافة">#}
+{#          {{ formset.management_form }}#}
+{##}
+{#    {{ formset | crispy }}#}
+{##}
+{#          {% for f in formset %}#}
+{#            {{ f }}#}
+{##}
+{#          {% endfor %}#}
+{#        </form>#}
+{#      </div>#}
 
+{#<div class="col-md-4">#}
+{#    <form action="" method="post">{% csrf_token %}#}
+{#        {{ form.as_p }}#}
+{##}
+{#        <table class="table">#}
+{#            {{ formset.management_form }}#}
+{##}
+{#            {% for form in formset.forms %}#}
+{#                {% if forloop.first %}#}
+{#                    <thead>#}
+{#                    <tr>#}
+{#                        {% for field in form.visible_fields %}#}
+{#                            <th>{{ field.label }}</th>#}
+{#                        {% endfor %}#}
+{#                    </tr>#}
+{#                    </thead>#}
+{#                {% endif %}#}
+{#                <tr class=" formset_row">#}
+{#                    {% for field in form.visible_fields %}#}
+{#                        <td>#}
+                            {# Include the hidden fields in the form #}
+{#                            {% if forloop.first %}#}
+{#                                {% for hidden in form.hidden_fields %}#}
+{#                                    {{ hidden }}#}
+{#                                {% endfor %}#}
+{#                            {% endif %}#}
+{#                            {{ field.errors.as_ul }}#}
+{#                            {{ field }}#}
+{#                        </td>#}
+{#                    {% endfor %}#}
+{#                </tr>#}
+{#            {% endfor %}#}
+{#        </table>#}
+{#        <input type="submit" value="Save"/>#}
+{#    </form>#}
+{#</div>#}
 
-  {#  <form id="myForm" method="post" action="">#}
-  {#    {% csrf_token %}#}
-  {#    {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}#}
-  {#    {{ form }}#}
-  {#    <table border="0" cellpadding="0" cellspacing="0">#}
-  {#      <tbody>#}
-  {#      {% for form in formset.forms %}#}
-  {#        <div class="link-formset ">#}
-  {#          <div class="form-row">#}
   {##}
-  {#            {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}#}
-  {#            <tr>#}
-  {#              <td>#}
-  {#                {% if form.instance.pk %}{{ form.DELETE }}{% endif %}#}
+  {#  <div class="card">#}
+  {#    <form action="" method="post" class="form-group card-body">#}
+  {#      {% csrf_token %}#}
   {##}
-  {#                {{ form.field1 }}#}
-  {#              </td>#}
-  {#              <td>{{ form.name }}</td>#}
-  {#            </tr>#}
-  {#          </div>#}
-  {#        </div>#}
-  {#      {% endfor %}#}
-  {#      </tbody>#}
-  {#    </table>#}
-  {#    {{ formset.management_form }}#}
-  {#    <input type="submit" value="Create Invoice">#}
-  {#  </form>#}
+  {#      <legend>Parent</legend>#}
+  {#      {% if messages %}#}
+  {#        {{ messages }}#}
+  {##}
+  {#      {% endif %}#}
 
+  {#    <form id="myForm" method="post" action="">#}
+  {#      {% csrf_token %}#}
+  {#            <fieldset>#}
+  {##}
+  {#              <legend>bill</legend>#}
+  {#              <div>#}
+  {#                {{ formset.management_form }}#}
+  {#                {% for form in formset.forms %}#}
+  {#                  {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}#}
+  {#                  {{ form.errors }}#}
+  {##}
+  {#                  <div class="link-formset ">#}
+  {#                    <div class="form-row">#}
+  {##}
+  {##}
+  {#                      <div class="form-group col-md-4 mb-0">#}
+  {#                        {{ form.qtn }}#}
+  {#                      {{ form.price }}#}
+  {#                       {{ form.delivery_date }}#}
+  {#                       {{ form.output_number }}#}
+  {#                      </div>#}
+  <div class="col-md-4">
+    <form action="" method="post">{% csrf_token %}
 
-  <div class="card">
-    <form action="" method="post" class="form-group card-body">
-      {% csrf_token %}
+  <table class="table">
+    {{ formset.management_form }}
 
-      <legend>Parent</legend>
-      {% if messages %}
-        {{ messages }}
+    {{ form.material }}
+   <div class="link-formset ">
+    {% for form in formset.forms %}
+      {% if forloop.first %}
+        <thead>
+        <tr>
 
-      {% endif %}
-      {{ parent_form  | crispy }}
-
-
-      <fieldset>
-
-        <legend>bill</legend>
-        <div>
-          {{ formset.management_form }}
-          {% for form in formset.forms %}
-            {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
-{{ form.errors }}
-
-            <div class="link-formset ">
-              <div class="form-row">
-
-
-                <div class="form-group col-md-4 mb-0">
-                  {{ form }}
-                  d
-                </div>
-{##}
-{##}
-{#                <div class="form-group col-md-2 mb-0">#}
-{#                  {{ form.qtn }}#}
-{#                </div>#}
-{##}
-{#                <div class=" form-group col-md-2 mb-0">#}
-{#                  {{ form.price }}#}
-{##}
-{#                </div>#}
-{##}
-{#                <div class="form-group  col-md-2mb-0">#}
-{#                  {{ form.delivery_date }}#}
-{#                </div>#}
-{##}
-{#                <div class="form-group  col-md-2mb-0">#}
-{#                  {{ form.output_number }}#}
-{#                </div>#}
-
-
-              </div>
-
-            </div>
+          {% for field in form.visible_fields %}
+            <th>{{ field.label }}</th>
           {% endfor %}
-        </div>
+        </tr>
+        </thead>
+      {% endif %}
+      <tr class=" formset_row">
 
-      </fieldset>
-
-
-      <input type="submit" value="Register" class="btn btn-primary">
-    </form>
-
+        {% for field in form.visible_fields %}
+          <td>
+            {% if forloop.first %}
+              {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+              {% endfor %}
+            {% endif %}
+            {{ field.errors.as_ul }}
+            {{ field }}
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </table>
+  <input type="submit" value="Save"/>
+  </form>
   </div>
 
+  {#                      <div class="form-group col-md-2 mb-0">#}
+  {#                        {{ form.qtn }}#}
+  {#                      </div>#}
+  {##}
+  {#                      <div class=" form-group col-md-2 mb-0">#}
+  {#                        {{ form.price }}#}
+  {##}
+  {#                      </div>#}
+  {##}
+  {#                      <div class="form-group  col-md-2mb-0">#}
+  {#                        {{ form.delivery_date }}#}
+  {#                      </div>#}
+  {##}
+  {#                      <div class="form-group  col-md-2mb-0">#}
+  {#                        {{ form.output_number }}#}
+  {#                      </div>#}
+
+  {#<input type="submit" value="Create Invoice">#}
 
 
 {% endblock content %}
