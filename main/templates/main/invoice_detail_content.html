@@ -1,0 +1,71 @@
+<div class="row">
+  <div class="col-3">
+    <p>顧客名</p>
+  </div>
+  <div class="col-9">
+    <p>{{ invoice.invoice_number }}</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-3">
+    <p>登録日</p>
+  </div>
+  <div class="col-9">
+    <p>{{ invoice.created|date:"Y/m/d G:i:s" }}</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-3">
+    <p>担当者</p>
+  </div>
+  <div class="col-9">
+    <p>{{ invoice.created_by.get_full_name }}</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <table class="table table-sm table-striped table-bordered ">
+      <thead class="thead-dark">
+      <tr>
+        <th></th>
+        <th>المادة</th>
+        <th>الكمية</th>
+        <th>السعر</th>
+        <th>تاريخ الاستلام</th>
+        <th>رقم الاخراج</th>
+      </tr>
+      </thead>
+      <tbody>
+      {{ invoice.invoicedetails_set.all }}
+      {% for detail in invoice.invoice_details.all %}
+        <tr>
+          <td class="rownum"></td>
+          <td>{{ detail.material }}</td>
+          <td class="number">{{ detail.quantity }}</td>
+          <td class="number">{{ detail.price }} </td>
+          <td class="number">{{ detail.delivery_date }} </td>
+          <td class="number">{{ detail.output_number }} </td>
+
+        </tr>
+      {% endfor %}
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="3"></td>
+        <th>sub_total </th>
+        <td class="number">{{ invoice.sub_total }} </td>
+      </tr>
+      <tr>
+        <td colspan="3"></td>
+        <th>tax</th>
+        <td class="number">{{ invoice.tax }} </td>
+      </tr>
+      <tr>
+        <td colspan="3"></td>
+        <th>total_amount</th>
+        <td class="number">{{ invoice.total_amount }} </td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

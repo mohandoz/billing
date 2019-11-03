@@ -11,158 +11,151 @@
 
 {% block content %}
 
-
-{#      <div class="card">#}
-{#      <div class="card-body">#}
-{#        <form method="post">{% csrf_token %}#}
-{#          {{ form | crispy }}#}
-{#          <input type="submit" value="اضافة">#}
-{#          {{ formset.management_form }}#}
-{##}
-{#    {{ formset | crispy }}#}
-{##}
-{#          {% for f in formset %}#}
-{#            {{ f }}#}
-{##}
-{#          {% endfor %}#}
-{#        </form>#}
-{#      </div>#}
-
-{#<div class="col-md-4">#}
-{#    <form action="" method="post">{% csrf_token %}#}
-{#        {{ form.as_p }}#}
-{##}
-{#        <table class="table">#}
-{#            {{ formset.management_form }}#}
-{##}
-{#            {% for form in formset.forms %}#}
-{#                {% if forloop.first %}#}
-{#                    <thead>#}
-{#                    <tr>#}
-{#                        {% for field in form.visible_fields %}#}
-{#                            <th>{{ field.label }}</th>#}
-{#                        {% endfor %}#}
-{#                    </tr>#}
-{#                    </thead>#}
-{#                {% endif %}#}
-{#                <tr class=" formset_row">#}
-{#                    {% for field in form.visible_fields %}#}
-{#                        <td>#}
-                            {# Include the hidden fields in the form #}
-{#                            {% if forloop.first %}#}
-{#                                {% for hidden in form.hidden_fields %}#}
-{#                                    {{ hidden }}#}
-{#                                {% endfor %}#}
-{#                            {% endif %}#}
-{#                            {{ field.errors.as_ul }}#}
-{#                            {{ field }}#}
-{#                        </td>#}
-{#                    {% endfor %}#}
-{#                </tr>#}
-{#            {% endfor %}#}
-{#        </table>#}
-{#        <input type="submit" value="Save"/>#}
-{#    </form>#}
-{#</div>#}
-
-  {##}
-  {#  <div class="card">#}
-  {#    <form action="" method="post" class="form-group card-body">#}
-  {#      {% csrf_token %}#}
-  {##}
-  {#      <legend>Parent</legend>#}
-  {#      {% if messages %}#}
-  {#        {{ messages }}#}
-  {##}
-  {#      {% endif %}#}
-
-  {#    <form id="myForm" method="post" action="">#}
-  {#      {% csrf_token %}#}
-  {#            <fieldset>#}
-  {##}
-  {#              <legend>bill</legend>#}
-  {#              <div>#}
-  {#                {{ formset.management_form }}#}
-  {#                {% for form in formset.forms %}#}
-  {#                  {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}#}
-  {#                  {{ form.errors }}#}
-  {##}
-  {#                  <div class="link-formset ">#}
-  {#                    <div class="form-row">#}
-  {##}
-  {##}
-  {#                      <div class="form-group col-md-4 mb-0">#}
-  {#                        {{ form.qtn }}#}
-  {#                      {{ form.price }}#}
-  {#                       {{ form.delivery_date }}#}
-  {#                       {{ form.output_number }}#}
-  {#                      </div>#}
   <div class="col-md-4">
     <form action="" method="post">{% csrf_token %}
 
-  <table class="table">
-    {{ formset.management_form }}
+      {{ form }}
 
-    {{ form.material }}
-   <div class="link-formset ">
-    {% for form in formset.forms %}
-      {% if forloop.first %}
-        <thead>
-        <tr>
+      <table class="table">
 
-          {% for field in form.visible_fields %}
-            <th>{{ field.label }}</th>
-          {% endfor %}
-        </tr>
-        </thead>
-      {% endif %}
-      <tr class=" formset_row">
+        {% for form in formset.forms %}
 
-        {% for field in form.visible_fields %}
-          <td>
-            {% if forloop.first %}
-              {% for hidden in form.hidden_fields %}
-                {{ hidden }}
+
+          {% if forloop.first %}
+            <thead>
+            <tr>
+
+              {% for field in form.visible_fields %}
+                <th>{{ field.label }}</th>
               {% endfor %}
-            {% endif %}
-            {{ field.errors.as_ul }}
-            {{ field }}
-          </td>
+            </tr>
+            </thead>
+          {% endif %}
         {% endfor %}
-      </tr>
-    {% endfor %}
-  </table>
-  <input type="submit" value="Save"/>
-  </form>
+
+
+        {{ formset.management_form }}
+
+
+        {% for form in formset.forms %}
+
+          <tr class="formset_row">
+
+            <td>
+
+              {{ form.material }}
+              {{ form.material.errors }}
+            </td>
+
+            <td>
+
+              {{ form.quantity }}
+              <p class="invalid-feedback text-danger">{{ form.quantity.errors }} </p>
+            </td>
+
+            <td>
+
+              {{ form.price }}
+              {{ form.price.errors }}
+
+            </td>
+
+            <td>
+
+              {{ form.delivery_date }}
+              {{ form.delivery_date.errors }}
+            </td>
+
+            <td>
+
+              {{ form.output_number }}
+              {{ form.output_number.errors }}
+            </td>
+          </tr>
+
+
+        {% endfor %}
+
+
+      </table>
+      <a href="#" class="btn btn-outline-secondary add-invoicedetail col-12">add new</a>
+
+      <input type="submit" value="Save"/>
+    </form>
   </div>
 
-  {#                      <div class="form-group col-md-2 mb-0">#}
-  {#                        {{ form.qtn }}#}
-  {#                      </div>#}
-  {##}
-  {#                      <div class=" form-group col-md-2 mb-0">#}
-  {#                        {{ form.price }}#}
-  {##}
-  {#                      </div>#}
-  {##}
-  {#                      <div class="form-group  col-md-2mb-0">#}
-  {#                        {{ form.delivery_date }}#}
-  {#                      </div>#}
-  {##}
-  {#                      <div class="form-group  col-md-2mb-0">#}
-  {#                        {{ form.output_number }}#}
-  {#                      </div>#}
-
-  {#<input type="submit" value="Create Invoice">#}
 
 
 {% endblock content %}
 
 
 {% block js %}
-  <script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
+
   {#  <script type="text/javascript" src="{% static 'js/datepickerquery.js' %}"></script>#}
+  <script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/jquery.formset.1.2.2.js' %}"></script>
+
+
+
+
+  <script type="text/html" id="invoicedetail-template">
+    <tr id="invoicedetail-__prefix__" class="formset_row">
+      <td>
+        {{ formset.empty_form.material }}
+      </td>
+
+      <td>
+        {{ formset.empty_form.quantity }}
+      </td>
+
+      <td>
+        {{ formset.empty_form.price }}
+
+
+      </td>
+
+      <td>
+        {{ formset.empty_form.delivery_date }}
+      </td>
+
+      <td>
+        {{ formset.empty_form.output_number }}
+      </td>
+
+      <td>
+        <a class="remove" href="#">remove</a>
+      </td>
+    </tr>
+  </script>
+
+
+  <script>
+    $(function () {
+      $('.add-invoicedetail').click(function (e) {
+        e.preventDefault();
+        var count = parseInt($('#id_invoice_details-TOTAL_FORMS').attr('value'), 10);
+        var tmplMarkup = $('#invoicedetail-template').html();
+        var compiledTmpl = tmplMarkup.replace(/__prefix__/g, 1)
+        console.log(compiledTmpl);
+        $('tbody').append(compiledTmpl);
+        $('#id_invoice_details-TOTAL_FORMS').attr('value', count + 1);
+      });
+
+      /*.. $('body').on( "click", ".remove", function(e) {
+         e.preventDefault();
+
+         var count = parseInt($('#id_invoice_details-TOTAL_FORMS').attr('value'), 10);
+         $('#id_invoice_details-TOTAL_FORMS').attr('value', count - 1);
+         console.log(1)
+         var x = $(this).closest(".formset_row").remove();
+         console.log(x)
+       });
+
+       */
+    });
+
+
+  </script>
 
 {% endblock js %}
 

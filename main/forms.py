@@ -1,7 +1,9 @@
 from django import forms
 from django.forms import ModelForm, modelformset_factory
-from .models import Company, Branch, Material, Invoice, MaterialOrder
+from .models import Company, Branch, Material, Invoice, InvoiceDetail
 from django.forms.models import inlineformset_factory
+from django.forms.widgets import Select
+
 from django.forms import BaseInlineFormSet
 # https://dev.to/zxenia/django-inline-formsets-with-class-based-views-and-crispy-forms-14o6
 
@@ -47,6 +49,7 @@ from django.forms import BaseInlineFormSet
 #     extra=1,
 # )
 
+
 class MaterialForm(ModelForm):
 
     class Meta:
@@ -65,29 +68,34 @@ class MaterialForm(ModelForm):
         self.empty_permitted = False
 
 
+class InvoiceForm(ModelForm):
+    class Meta:
+        model = Invoice
+        fields = ('branch', 'invoice_number')
 
-class MaterialOrderForm(ModelForm):
+
+
+
+
+class InvoiceDetailForm(ModelForm):
     # material = forms.ModelChoiceField(Material.objects.all(), empty_label='None', required=False, label='المادة')
 
 
     class Meta:
-        model = MaterialOrder
-        fields = ('qtn', 'price', 'delivery_date', 'output_number')
+        model = InvoiceDetail
+        fields = ('material','quantity', 'price', 'delivery_date', 'output_number')
 
-    # def __init__(self, *args, **kwargs):
-    #     super(InvoiceMaterialForm, self).__init__(*args, **kwargs)
-    #     self.fields['material'].queryset = Material.objects.all()
-
-
-    # make sure the that form is not empty
     def __init__(self, *arg, **kwarg):
-        super(MaterialOrderForm, self).__init__(*arg, **kwarg)
-        self.empty_permitted = False
+        super(InvoiceDetailForm, self).__init__(*arg, **kwarg)
+        # self.empty_permitted = False
+
+        self.fields['material'].choices = lambda: [('', '-- المادة --')] + [
+                    (material.id, '%s ' % (material.name)) for material in
+                    Material.objects.order_by('name')]
 
 
  # fields=[ 'qtn', 'price', 'delivery_date', 'output_number'],
-InvoiceMaterialFormSet = inlineformset_factory(
-    Material, MaterialOrder, form=MaterialOrderForm, fields=[ 'qtn', 'price', 'delivery_date', 'output_number'],
-   extra=1, can_delete=True # fields for child thats why no material
-    )
+InvoiceDetailFormSet = inlineformset_factory(
+    Invoice, InvoiceDetail, form=InvoiceDetailForm, extra=1,    validate_min=True,
+    can_delete=False)
 

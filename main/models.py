@@ -57,19 +57,18 @@ class Material(TimeStampedModel):
 
 class Invoice(TimeStampedModel):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    created_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    # created_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name="invoices")
-    material = models.ManyToManyField(Material, related_name="invoices")
     invoice_number = models.CharField(max_length=20, unique=True)
     print_count = models.PositiveIntegerField(default=0)
 
-    def save(self, *args, **kwargs):
-        if not self.invoice_number:
-            company = self.branch.company
-            self.invoice_number = "number"
-            self.invoice_number.save()
-
-        super(Invoice, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if not self.invoice_number:
+    #         company = self.branch.company
+    #         self.invoice_number = "number"
+    #         self.invoice_number.save()
+    #
+    #     super(Invoice, self).save(*args, **kwargs)
 
 
 
@@ -80,10 +79,10 @@ class Invoice(TimeStampedModel):
         return f"{self.branch.name} - {self.invoice_number}"
 
 
-class MaterialOrder(TimeStampedModel):
+class InvoiceDetail(TimeStampedModel):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    material = models.ForeignKey(Material, on_delete=models.CASCADE, related_name="material_orders")
-    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="material_orders")
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="invoice_details")
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, related_name="invoice_details")
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
     delivery_date = models.DateField()

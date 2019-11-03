@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from .models import Company, Branch, Material, Invoice, MaterialOrder
+from .models import Company, Branch, Material, Invoice, InvoiceDetail
 from .filters import CompaniesFilter
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -9,10 +9,11 @@ from django.shortcuts import get_object_or_404
 from django.views import generic
 from .choices import *
 # from .forms import MaterialForm, MaterlModelFormset
-from .forms import InvoiceMaterialForm, InvoiceMaterialFormSet, MaterialForm
+from .forms import InvoiceForm, InvoiceDetailForm, InvoiceDetailFormSet, MaterialForm
 from django.db import transaction
 
-
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .mixins import InvoiceMixin, FormsetMixin
 
 @login_required
 def home(request):
@@ -140,23 +141,29 @@ class MaterialUpdateView(generic.UpdateView):
 
 
 
-class InvoiceCreateView(generic.CreateView):
-    model = MaterialOrder
-    # fields = ["material", "qtn", "price", "delivery_date", "output_number"]
+class InvoiceCreateView(LoginRequiredMixin, InvoiceMixin, FormsetMixin, generic.CreateView):
     template_name = 'main/invoice_form.html'
-    form_class = InvoiceMaterialForm
+    model = Invoice
+    form_class = InvoiceForm
+    formset_class = InvoiceDetailFormSet
 
-
-
-    def dispatch(self, request, *args, **kwargs):
-        branch = kwargs.get("uid")
-        self.branch = get_object_or_404(Branch, uid=branch)
-        print("dispacth")
-        return super().dispatch(request, *args, **kwargs)
-
-    def form_invalid(self, form):
-        print(form.errors)
-        return super(InvoiceCreateView, self).form_invalid(form)
+# class InvoiceCreateView(generic.CreateView):
+#     model = InvoiceDetail
+#     # fields = ["material", "qtn", "price", "delivery_date", "output_number"]
+#     template_name = 'main/invoice_form.html'
+#     form_class = InvoiceDetailFormSet
+#
+#
+#
+#     def dispatch(self, request, *args, **kwargs):
+#         branch = kwargs.get("uid")
+#         self.branch = get_object_or_404(Branch, uid=branch)
+#         print("dispacth")
+#         return super().dispatch(request, *args, **kwargs)
+#
+#     def form_invalid(self, form):
+#         print(form.errors)
+#         return super(InvoiceCreateView, self).form_invalid(form)
 
 
     # def form_valid(self, form):
@@ -195,34 +202,34 @@ class InvoiceCreateView(generic.CreateView):
     #         print("return")
     #     return super(InvoiceCreateView, self).form_valid(form)
 
-    def form_valid(self, form):
-        context = self.get_context_data()
-        formset = context['formset']
-
-        branch_uid = self.kwargs.get("uid")
-        branch = get_object_or_404(Branch, uid=branch_uid)
-
-        from uuid import uuid4
-        x = str(uuid4())
-        invoice = Invoice.objects.create(branch=self.branch, invoice_number=x[:5])
-
-        with transaction.atomic():
-            form.instance.invoice = invoice
-            self.object = form.save()
-
-            if formset.is_valid():
-                formset.instance.invoice = invoice
-                formset.save()
-        return super(InvoiceCreateView, self).form_valid(form)
-
-
-    def get_context_data(self, **kwargs):
-        context = super(InvoiceCreateView, self).get_context_data(**kwargs)
-        if self.request.POST:
-            context['formset'] = InvoiceMaterialFormSet(self.request.POST)
-        else:
-            context['formset'] = InvoiceMaterialFormSet()
-        return context
+    # def form_valid(self, form):
+    #     context = self.get_context_data()
+    #     formset = context['formset']
+    #
+    #     branch_uid = self.kwargs.get("uid")
+    #     branch = get_object_or_404(Branch, uid=branch_uid)
+    #
+    #     from uuid import uuid4
+    #     x = str(uuid4())
+    #     invoice = Invoice.objects.create(branch=self.branch, invoice_number=x[:5])
+    #
+    #     with transaction.atomic():
+    #         form.instance.invoice = invoice
+    #         self.object = form.save()
+    #
+    #         if formset.is_valid():
+    #             formset.instance.invoice = invoice
+    #             formset.save()
+    #     return super(InvoiceCreateView, self).form_valid(form)
+    #
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super(InvoiceCreateView, self).get_context_data(**kwargs)
+    #     if self.request.POST:
+    #         context['form'] = InvoiceDetailFormSet(self.request.POST)
+    #     else:
+    #         context['form'] = InvoiceDetailFormSet()
+    #     return context
 
 
 class InvoiceDetailView(generic.DetailView):

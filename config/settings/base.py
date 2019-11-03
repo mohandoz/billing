@@ -76,6 +76,7 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "widget_tweaks",
     'extra_views',
+    'bootstrap4'
 ]
 
 LOCAL_APPS = [
