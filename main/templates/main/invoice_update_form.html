@@ -5,106 +5,102 @@
 {% load crispy_forms_tags %}
 
 
-{% block title %}  انشاء فاتورة {% endblock title %}
+{% block title %}  تعديل فاتورة {% endblock title %}
 {% block content_header %}
-  انشاء فاتورة
+  تعديل فاتورة
+  {{ object.invoice_number }}
   <br>
   {{ branch }} / {{ company }}
 
 {% endblock %}
-{% block content_right_active %}<a href="{% url 'branch-invoice-list'  branch.uid %}">{{ branch }}</a> {% endblock %}
+{% block content_right_active %}<a href="{% url 'invoice-detail' object.uid %}">عودة الى الفاتورة</a> {% endblock %}
 
 {% block content %}
 
   <div class="card">
     <div class="card-body">
+      <form action="" method="post">{% csrf_token %}
 
-      <div class="form-group">
-        <form action="" method="post">{% csrf_token %}
+        {{ form }}
+        {#      {{ form.errors }}#}
 
-          {{ form }}
+        <table class="table">
 
-          <table class="table">
-
-            {% for form in formset.forms %}
-
-
-              {% if forloop.first %}
-                <thead>
-                <tr>
-
-                  {% for field in form.visible_fields %}
-                    <th>{{ field.label }}</th>
-                  {% endfor %}
-                </tr>
-                </thead>
-              {% endif %}
-            {% endfor %}
+          {% for form in formset.forms %}
 
 
-            {{ formset.management_form }}
+            {% if forloop.first %}
+              <thead>
+              <tr>
 
-
-            {% for form in formset.forms %}
-
-              <tr class="formset_row">
-                {% for hidden in form.hidden_fields %}
-                  {{ hidden }}
+                {% for field in form.visible_fields %}
+                  <th>{{ field.label }}</th>
                 {% endfor %}
-
-                <td>
-                  {% render_field form.material class="form-control" %}
-                  {{ form.material.errors }}
-                </td>
-
-                <td>
-
-                  {% render_field form.quantity class=" form-control" %}
-                  {{ form.quantity.errors }}
-                </td>
-
-                <td>
-                  {% render_field form.price class=" form-control" %}
-
-                  {{ form.price.errors }}
-
-                </td>
-
-                <td>
-                  {% render_field form.delivery_date class=" form-control" %}
-
-                  {{ form.delivery_date.errors }}
-                </td>
-
-                <td>
-                  {% render_field form.output_number class=" form-control" %}
-
-                  {{ form.output_number.errors }}
-                </td>
-
-                <td>
-
-                  {{ form.DELETE }}
-                  {{ form.DELETE.errors }}
-                </td>
               </tr>
+              </thead>
+            {% endif %}
+          {% endfor %}
 
 
-            {% endfor %}
+          {{ formset.management_form }}
 
 
-          </table>
-          <a href="#" class="btn btn-outline-secondary add-invoicedetail col-12">اضف مادة</a>
+          {% for form in formset.forms %}
 
-         <div class="form-row mt-1">
+            <tr class="formset_row">
+              {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+              {% endfor %}
+
+              <td>
+                {% render_field form.material class="form-control" %}
+                {{ form.material.errors }}
+              </td>
+
+              <td>
+
+                {% render_field form.quantity class=" form-control" %}
+                {{ form.quantity.errors }}
+              </td>
+
+              <td>
+                {% render_field form.price class=" form-control" %}
+
+                {{ form.price.errors }}
+
+              </td>
+
+              <td>
+                {% render_field form.delivery_date class=" form-control" %}
+
+                {{ form.delivery_date.errors }}
+              </td>
+
+              <td>
+                {% render_field form.output_number class=" form-control" %}
+
+                {{ form.output_number.errors }}
+              </td>
+
+              <td>
+
+                {{ form.DELETE }}
+                {{ form.DELETE.errors }}
+              </td>
+            </tr>
+
+          {% endfor %}
+
+
+        </table>
+        <a href="#" class="btn btn-outline-secondary add-invoicedetail col-12">اضف مادة</a>
+
+        <div class="form-row mt-1">
           <input type="submit" class="btn btn-success" value="حفظ"/>
         </div>
-        </form>
-      </div>
-
+      </form>
     </div>
   </div>
-
 
 {% endblock content %}
 
@@ -146,10 +142,6 @@
         {% render_field formset.empty_form.output_number class="form-control" %}
         {{ formset.empty_form.output_number.errors }}
       </td>
-
-      {#      <td>#}
-      {#        <a class="remove" href="#">remove</a>#}
-      {#      </td>#}
     </tr>
   </script>
 

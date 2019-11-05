@@ -71,7 +71,8 @@ class MaterialForm(ModelForm):
 class InvoiceForm(ModelForm):
     class Meta:
         model = Invoice
-        fields = ('branch', 'invoice_number')
+        fields = ('branch', 'created_by')
+        widgets = {'branch': forms.HiddenInput(), 'created_by': forms.HiddenInput(), }
 
 
 
@@ -99,3 +100,6 @@ InvoiceDetailFormSet = inlineformset_factory(
     Invoice, InvoiceDetail, form=InvoiceDetailForm, extra=1,    validate_min=True,
     can_delete=False)
 
+InvoiceUpdateFormSet = inlineformset_factory(
+    Invoice, InvoiceDetail, form=InvoiceDetailForm, extra=0,    validate_min=True,
+    can_delete=True)

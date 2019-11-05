@@ -2,18 +2,28 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from .models import Company, Branch, Material, Invoice, InvoiceDetail
-from .filters import CompaniesFilter
+from .filters import CompaniesFilter, FilteredListView, InvoiceFilterSet
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.shortcuts import get_object_or_404
 from django.views import generic
 from .choices import *
 # from .forms import MaterialForm, MaterlModelFormset
-from .forms import InvoiceForm, InvoiceDetailForm, InvoiceDetailFormSet, MaterialForm
+from .forms import InvoiceForm, InvoiceDetailForm, InvoiceDetailFormSet, InvoiceUpdateFormSet, MaterialForm
 from django.db import transaction
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .mixins import InvoiceMixin, FormsetMixin
+from django.views import View
+
+
+# print
+from django.http import HttpResponse, HttpResponseRedirect
+from weasyprint import HTML, CSS
+from weasyprint.fonts import FontConfiguration
+from django.template.loader import render_to_string
+
+from django.conf import settings
 
 @login_required
 def home(request):
@@ -51,14 +61,14 @@ def home(request):
                        "active": "active"})
 
 
-class CompanyCreateView(generic.CreateView):
+class CompanyCreateView(LoginRequiredMixin, generic.CreateView):
     model = Company
     fields = ["name", ]
     # template_name_suffix = '_create'
 
 
 
-class CompanyDetailView(generic.DetailView):
+class CompanyDetailView(LoginRequiredMixin, generic.DetailView):
     model = Company
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
@@ -76,7 +86,7 @@ class CompanyDetailView(generic.DetailView):
 
 
 
-class CompanyUpdateView(generic.UpdateView):
+class CompanyUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Company
     # template_name = "main/company_edit.html"
     fields = ["name", "status"]
@@ -86,7 +96,7 @@ class CompanyUpdateView(generic.UpdateView):
     slug_url_kwarg = 'uid'
 
 
-class CompanyDeleteView(generic.DeleteView):
+class CompanyDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Company
     # template_name = "main/company_edit.html"
     fields = ["name",]
@@ -97,7 +107,7 @@ class CompanyDeleteView(generic.DeleteView):
 
 # Branches
 
-class BranchCreateView(generic.CreateView):
+class BranchCreateView(LoginRequiredMixin, generic.CreateView):
     model = Branch
     fields = ["name", ]
 
@@ -111,7 +121,7 @@ class BranchCreateView(generic.CreateView):
         return super().form_valid(form)
 
 
-class BranchUpdateView(generic.UpdateView):
+class BranchUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Branch
     fields = ["name", "status"]
     template_name_suffix = '_update'
@@ -122,15 +132,16 @@ class BranchUpdateView(generic.UpdateView):
 
 #  Materials
 
-class MaterialListView(generic.ListView):
+class MaterialListView(LoginRequiredMixin, generic.ListView):
     model = Material
     fields = ["name", "status"]
 
-class MaterialCreateView(generic.CreateView):
+class MaterialCreateView(LoginRequiredMixin, generic.CreateView):
     model = Material
     fields = ["name", ]
 
-class MaterialUpdateView(generic.UpdateView):
+
+class MaterialUpdateView(LoginRequiredMixin, generic.UpdateView):
     template_name_suffix = '_update'
     model = Material
     fields = ["name", "status"]
@@ -146,6 +157,24 @@ class InvoiceCreateView(LoginRequiredMixin, InvoiceMixin, FormsetMixin, generic.
     model = Invoice
     form_class = InvoiceForm
     formset_class = InvoiceDetailFormSet
+
+    def dispatch(self, request, *args, **kwargs):
+        branch = kwargs.get("uid")
+        self.branch = get_object_or_404(Branch, uid=branch)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        created_by = self.request.user
+        return {'branch': self.branch, 'created_by': created_by}
+
+    def get_context_data(self, **kwargs):
+        context = super(InvoiceCreateView, self).get_context_data(**kwargs)
+        branch = self.branch
+        company = branch.company
+        context['branch'] = branch
+        context['company'] = company
+        return context
+
 
 # class InvoiceCreateView(generic.CreateView):
 #     model = InvoiceDetail
@@ -239,14 +268,105 @@ class InvoiceDetailView(generic.DetailView):
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
 
+    def dispatch(self, request, *args, **kwargs):
+        invoice_uid = kwargs.get("uid")
+        self.invoice = get_object_or_404(Invoice, uid=invoice_uid)
+        return super().dispatch(request, *args, **kwargs)
 
-class InvoiceUpdateView(generic.UpdateView):
+
+    def get_context_data(self, **kwargs):
+        context = super(InvoiceDetailView, self).get_context_data(**kwargs)
+        items = self.invoice.invoice_details.all()
+        grand_total = Decimal(0.0)
+
+        for item in items:
+            grand_total += item.total
+
+        context['grand_total'] = grand_total
+        return context
+
+
+
+
+class InvoiceUpdateView(LoginRequiredMixin, InvoiceMixin, FormsetMixin, generic.UpdateView):
+    is_update_view = True
+    template_name = 'main/invoice_update_form.html'
     model = Invoice
-    fields = ["invoice_number", ]
+    form_class = InvoiceForm
+    formset_class = InvoiceUpdateFormSet
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
 
 
+    def get_context_data(self, **kwargs):
+        context = super(InvoiceUpdateView, self).get_context_data(**kwargs)
+        branch = self.object.branch
+        company = branch.company
+        context['branch'] = branch
+        context['company'] = company
+        return context
+
+
+# class InvoiceListView(LoginRequiredMixin, generic.ListView):
+#     model = Invoice
+#     paginate_by = 10
+#     template_name = 'main/invoice_all_list.html'
+#
+
+class InvoiceListView(FilteredListView):
+    model = Invoice
+    filterset_class = InvoiceFilterSet
+    paginate_by = 10
+    template_name = 'main/invoice_all_list.html'
+
+
+
+class BranchInvoiceListView(LoginRequiredMixin, generic.ListView):
+    model = Invoice
+    paginate_by = 10
+
+    def dispatch(self, request, *args, **kwargs):
+        branch_uid = kwargs.get("uid")
+        self.branch = get_object_or_404(Branch, uid=branch_uid)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return self.branch.invoices.all().order_by("created")
+
+    def get_context_data(self, **kwargs):
+        context = super(BranchInvoiceListView, self).get_context_data(**kwargs)
+        branch = self.branch
+        context['branch'] = branch
+        return context
+
+class InvoicePdf(View):
+    def get(self, request, uid):
+        invoice = get_object_or_404(Invoice, uid=uid)
+        invoice_details = invoice.invoice_details.all()
+        grand_total = Decimal(0.0)
+
+        for item in invoice_details:
+            grand_total += item.total
+
+        response = HttpResponse(content_type="application/pdf")
+        response['Content-Disposition'] = f"inline; filename={invoice.invoice_number}.pdf"
+
+
+        html = render_to_string("main/weasy.html", {
+            'invoice': invoice,
+            'invoice_details': invoice_details,
+            'grand_total': grand_total,
+            'settings': settings.STATIC_URL,
+
+        })
+
+        font_config = FontConfiguration()
+        HTML(string=html).write_pdf(response, stylesheets=[f"{settings.STATIC_ROOT}/css/invoice.css"],font_config=font_config)
+
+        invoice.print_count += 1
+        invoice.save()
+
+        return response
 
 
 

@@ -4,9 +4,9 @@
 {% load custom_tags %}
 
 
-{% block title %} شركة {{ object }}{% endblock title %}
-{% block content_header %} شركة{{ object }} {% endblock %}
-{% block content_right_active %} شركة{{ object }}{% endblock %}
+{% block title %} {{ object }}{% endblock title %}
+{% block content_header %} {{ object }} {% endblock %}
+{% block content_right_active %} {{ object }}{% endblock %}
 
 {% block content %}
 
@@ -141,7 +141,7 @@
 
           <tr>
 
-            <td>{{ branch.name }}</td>
+            <td><a class="second after" href="{% url "branch-invoice-list" branch.uid %}">{{ branch.name }}</a></td>
 
 
             <td>{{ branch.created | date:"Y/n/j  l" }}</td>

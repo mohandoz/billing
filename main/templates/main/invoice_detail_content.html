@@ -1,27 +1,48 @@
 <div class="row">
   <div class="col-3">
-    <p>顧客名</p>
+    <p>اسم الشركة</p>
+  </div>
+  <div class="col-9">
+    <p>{{ invoice.branch.company }}</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-3">
+    <p>الفرع</p>
+  </div>
+  <div class="col-9">
+    <p>{{ invoice.branch }}</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-3">
+    <p>رقم الفاتورة</p>
   </div>
   <div class="col-9">
     <p>{{ invoice.invoice_number }}</p>
   </div>
 </div>
+
 <div class="row">
   <div class="col-3">
-    <p>登録日</p>
+    <p>التاريخ</p>
   </div>
   <div class="col-9">
-    <p>{{ invoice.created|date:"Y/m/d G:i:s" }}</p>
+    <p>{{ invoice.created | date:"Y/m/d G:i" }}</p>
   </div>
 </div>
+
 <div class="row">
   <div class="col-3">
-    <p>担当者</p>
+    <p>عداد الطباعة</p>
   </div>
   <div class="col-9">
-    <p>{{ invoice.created_by.get_full_name }}</p>
+    <p>{{ invoice.print_count }}</p>
   </div>
 </div>
+
 <div class="row">
   <div class="col-12">
     <table class="table table-sm table-striped table-bordered ">
@@ -31,6 +52,7 @@
         <th>المادة</th>
         <th>الكمية</th>
         <th>السعر</th>
+        <th>اجمالي</th>
         <th>تاريخ الاستلام</th>
         <th>رقم الاخراج</th>
       </tr>
@@ -43,7 +65,8 @@
           <td>{{ detail.material }}</td>
           <td class="number">{{ detail.quantity }}</td>
           <td class="number">{{ detail.price }} </td>
-          <td class="number">{{ detail.delivery_date }} </td>
+          <td class="number">{{ detail.total }} </td>
+          <td class="number">{{ detail.delivery_date | date:"Y/m/d" }} </td>
           <td class="number">{{ detail.output_number }} </td>
 
         </tr>
@@ -52,7 +75,7 @@
       <tfoot>
       <tr>
         <td colspan="3"></td>
-        <th>sub_total </th>
+        <th>sub_total</th>
         <td class="number">{{ invoice.sub_total }} </td>
       </tr>
       <tr>
@@ -62,10 +85,13 @@
       </tr>
       <tr>
         <td colspan="3"></td>
-        <th>total_amount</th>
-        <td class="number">{{ invoice.total_amount }} </td>
+        <th>المجموع</th>
+        <td class="number">{{ grand_total }} </td>
       </tr>
       </tfoot>
     </table>
   </div>
 </div>
+
+
+

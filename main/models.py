@@ -9,6 +9,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from .choices import *
 from decimal import Decimal
 from django.urls import reverse
+from django.db import IntegrityError
 
 
 class Company(TimeStampedModel):
@@ -57,18 +58,34 @@ class Material(TimeStampedModel):
 
 class Invoice(TimeStampedModel):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    # created_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    created_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name="invoices")
-    invoice_number = models.CharField(max_length=20, unique=True)
+    invoice_number = models.CharField(max_length=20, blank=True,unique=True)
     print_count = models.PositiveIntegerField(default=0)
 
-    # def save(self, *args, **kwargs):
-    #     if not self.invoice_number:
-    #         company = self.branch.company
-    #         self.invoice_number = "number"
-    #         self.invoice_number.save()
-    #
-    #     super(Invoice, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if not self.invoice_number:
+            success = False
+            branch_invoice_count = self.branch.invoices.all().count()
+            while not success:
+                try:
+                    company_id = self.branch.company.id
+                    branch_id = self.branch.id
+
+                    now = datetime.datetime.now()
+                    year = now.year
+                    month = now.month
+                    day = now.day
+
+                    self.invoice_number = f"{year}{month}{day}{company_id}{branch_id}{branch_invoice_count}"
+
+                    success = True
+                except IntegrityError:
+                    branch_invoice_count += 1
+
+
+
+        super(Invoice, self).save(*args, **kwargs)
 
 
 
@@ -85,6 +102,7 @@ class InvoiceDetail(TimeStampedModel):
     material = models.ForeignKey(Material, on_delete=models.CASCADE, related_name="invoice_details")
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    total = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
     delivery_date = models.DateField()
     output_number = models.PositiveIntegerField()
 
@@ -93,3 +111,8 @@ class InvoiceDetail(TimeStampedModel):
 
     def __str__(self):
         return f"{self.material.name} - {self.invoice.invoice_number}"
+
+    def save(self, *args, **kwargs):
+        self.total = self.quantity * self.price
+        super(InvoiceDetail, self).save(*args, **kwargs)
+

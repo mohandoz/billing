@@ -82,7 +82,7 @@
           <a href="" class="nav-link ">Home</a>
         </li>
       {% else %}
-        <a href="{% url 'home' %}" class="nav-link">Home</a>
+        <a href="{% url 'home' %}" class="nav-link">الرئيسية</a>
 
       {% endif %}
 
@@ -261,7 +261,6 @@
                 <p>Dashboard</p>
               </a>
             </li>
-
             <li class="nav-item has-treeview {% active_menu request "search register" %}">
               <a href="#" class="nav-link {% active request "search register" %}">
                 <i class="nav-icon fas fa-home"></i>
@@ -567,7 +566,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-left">
-              <li class="breadcrumb-item"><a href="">Home</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'home' %}">الرئيسية</a></li>
               <li class="breadcrumb-item active">{% block content_right_active %} {% endblock %}</li>
             </ol>
           </div><!-- /.col -->

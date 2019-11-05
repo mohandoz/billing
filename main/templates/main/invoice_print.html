@@ -1,0 +1,104 @@
+{% extends "base_print.html" %}
+
+{% block content %}
+
+<div class="card">
+  <div class="card-body">
+
+    <div class="row">
+      <div class="col-sm-8 offset-sm-2">
+        <h2 class="text-center">فاتورة</h2>
+        <div>
+          <div class="row">
+            <div class="col-3">
+              <p>اسم الشركة</p> <p></p>
+            </div>
+            <div class="col-9">
+              <p>{{ invoice.branch.company }}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-3">
+              <p>الفرع</p>
+            </div>
+            <div class="col-9">
+              <p>{{ invoice.branch }}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-3">
+              <p>رقم الفاتورة</p>
+            </div>
+            <div class="col-9">
+              <p>{{ invoice.invoice_number }}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-3">
+              <p>التاريخ</p>
+            </div>
+            <div class="col-9">
+              <p>{{ invoice.created | date:"Y/m/d G:i" }}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-sm table-striped table-bordered table_rtl">
+                <thead class="thead-dark">
+                <tr>
+                  <th></th>
+                  <th>المادة</th>
+                  <th>الكمية</th>
+                  <th>السعر</th>
+                  <th>اجمالي</th>
+                  <th>تاريخ الاستلام</th>
+                  <th>رقم الاخراج</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{ invoice.invoicedetails_set.all }}
+                {% for detail in invoice.invoice_details.all %}
+                  <tr>
+                    <td class="rownum"></td>
+                    <td>{{ detail.material }}</td>
+                    <td class="number">{{ detail.quantity }}</td>
+                    <td class="number">{{ detail.price }} </td>
+                    <td class="number">{{ detail.total }} </td>
+                    <td class="number">{{ detail.delivery_date | date:"Y/m/d" }} </td>
+                    <td class="number">{{ detail.output_number }} </td>
+
+                  </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                  <td colspan="3"></td>
+                  <th>sub_total</th>
+                  <td class="number">{{ invoice.sub_total }} </td>
+                </tr>
+                <tr>
+                  <td colspan="3"></td>
+                  <th>tax</th>
+                  <td class="number">{{ invoice.tax }} </td>
+                </tr>
+                <tr>
+                  <td colspan="3"></td>
+                  <th>المجموع</th>
+                  <td class="number">{{ grand_total }} </td>
+                </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

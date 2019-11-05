@@ -1,25 +1,52 @@
 {% extends "base_lte.html" %}
+{% load static i18n %}
+
+{% block title %}  {{ invoice.branch.company }} {% endblock title %}
+{% block content_header %}  {{ invoice.branch.company }} {% endblock %}
+{% block content_right_active %} <a href="{% url 'branch-invoice-list' invoice.branch.uid %}">{{ invoice.branch }}</a> {% endblock %}
+
+
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-8 offset-sm-2">
-                <h2 class="text-center">詳細表示</h2>
-                <div class="clearfix">
-                    <div class="float-right mt-1 mb-3">
-                        <a class="btn btn-outline-secondary command" href="">delete</a>
-                        <a class="btn btn-outline-secondary command" href="">update</a>
-                        <a class="btn btn-outline-secondary command" href="">idk</a>
-                    </div>
-                </div>
-                <div>
-                    {% include "./invoice_detail_content.html" %}
-                </div>
-                <div class="float-right mt-1 mb-1">
-                    <a class="btn btn-outline-secondary command" href="">delete</a>
-                    <a class="btn btn-outline-secondary command" href="">update</a>
-                    <a class="btn btn-outline-secondary command" href="">index</a>
-                </div>
+  <div class="card">
+    <div class="card-body">
+
+      <div class="row">
+        <div class="col-sm-12 offset-sm-12">
+          <h2 class="text-center"> فاتورة
+          {{ invoice.invoice_number }}</h2>
+          <div class="clearfix">
+            <div class="float-right mt-1 mb-3">
+
+              <button class="btn btn-outline-secondary command" type="button"
+                      onclick="printJS('{% url 'invoice-print' object.uid %}')">طباعة
+              </button>
+
+              <a class="btn btn-outline-secondary command" href="{% url 'invoice-update' object.uid %}">تعديل</a>
+              <a class="btn btn-outline-secondary command" href="">حذف</a>
+{#              <a class="btn btn-outline-secondary command" href="">الرئيسية</a>#}
             </div>
+          </div>
+          <div>
+            {% include "./invoice_detail_content.html" %}
+          </div>
+          <div class="float-right mt-1 mb-1">
+
+            <button class="btn btn-outline-secondary command" type="button"
+                    onclick="printJS('{% url 'invoice-print' object.uid %}')">طباعة
+            </button>
+            <a class="btn btn-outline-secondary command" href="{% url 'invoice-update' object.uid %}">تعديل</a>
+            <a class="btn btn-outline-secondary command" href="">حذف</a>
+{#            <a class="btn btn-outline-secondary command" href="">الرئيسية</a>#}
+          </div>
         </div>
+      </div>
     </div>
+
+  </div>
 {% endblock %}
+
+{% block js %}
+  <script src="{% static 'js/print.min.js' %}"></script>
+
+
+{% endblock js %}

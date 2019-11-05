@@ -1,0 +1,101 @@
+{% extends 'base_lte.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% load custom_tags %}
+
+
+{% block title %}الفرع{% endblock title %}
+{% block content_header %}{{ branch }} {% endblock %}
+{% block content_right_active %}
+  <a href="{% url 'company-detail' branch.company.uid %}">{{ branch.company }} </a> {% endblock %}
+
+{% block content %}
+
+
+
+  <div class="card">
+    <div class="card-body">
+      <input type="button" value="   فاتورة جديدة " class="fas fa-plus-square btn btn-success my-modal-wrapper"
+             onclick="location='{% url 'invoice-create' branch.uid %}'">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <table class="table table-bordered  table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+          <th>رقم الفاتورة</th>
+          <th>الحالة</th>
+          <th>تعديل</th>
+          <th>pdf</th>
+          <th>عداد الطباعة</th>
+          <th>created by</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for object in object_list %}
+
+
+          <tr>
+
+            <td><a class="second after" href="{% url "invoice-detail" object.uid %}">{{ object.invoice_number }}</a>
+            </td>
+
+
+            <td>{% if object.status == 1 %}
+              <span class="badge badge-success">فعال</span>
+            {% else %}
+              <span class="badge badge-danger">غير فعال</span>
+            {% endif %}
+            </td>
+
+            <td>
+
+              <input type="button" value="" class="fas fa-cog btn btn-default my-modal-wrapper"
+                     onclick="location='{% url 'material-update' object.uid %}'">
+            </td>
+
+            <td>
+              {{ object.print_count }} idk
+            </td>
+
+            <td>
+              {{ object.print_count }}
+            </td>
+
+            <td>
+             {{ object.created_by }}
+            </td>
+
+          </tr>
+
+        {% empty %}
+          <tr>
+            <td colspan="20">
+              لا يوجد فواتير
+            </td>
+          </tr>
+
+
+        {% endfor %}
+        </tbody>
+
+      </table>
+
+    </div>
+  </div>
+
+{% endblock content %}
+
+
+{% block js %}
+  <script>
+    var csrf_token = '{{ csrf_token }}';
+    {#var register_url = "{% url "register" %}"#}
+
+  </script>
+
+
+{% endblock js %}

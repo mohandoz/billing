@@ -1,5 +1,6 @@
 from .models import Company, Branch, Invoice, InvoiceDetail
 import django_filters
+from django.views import generic
 
 # https://simpleisbetterthancomplex.com/tutorial/2016/11/28/how-to-filter-querysets-dynamically.html
 # https://www.caktusgroup.com/blog/2018/10/18/filtering-and-pagination-django/
@@ -7,7 +8,7 @@ import django_filters
 
 
 class CompaniesFilter(django_filters.FilterSet):
-    name = first_name = django_filters.CharFilter(lookup_expr='icontains', label="الاسم")
+    name = django_filters.CharFilter(lookup_expr='icontains', label="الاسم")
 
     def __init__(self, data, *args, **kwargs):
         data = data.copy()
@@ -21,3 +22,37 @@ class CompaniesFilter(django_filters.FilterSet):
 
 
 
+
+
+class FilteredListView(generic.ListView):
+    filterset_class = None
+
+    def get_queryset(self):
+        # Get the queryset however you usually would.  For example:
+        queryset = super().get_queryset()
+        # Then use the query parameters and the queryset to
+        # instantiate a filterset and save it as an attribute
+        # on the view instance for later.
+        self.filterset = self.filterset_class(self.request.GET, queryset=queryset)
+        # Return the filtered queryset
+        return self.filterset.qs.distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Pass the filterset to the template - it provides the form.
+        context['filterset'] = self.filterset
+        return context
+
+
+class InvoiceFilterSet(django_filters.FilterSet):
+    invoice_number = django_filters.CharFilter(lookup_expr='icontains', label="رقم الفاتورة")
+
+    def __init__(self, data, *args, **kwargs):
+        data = data.copy()
+        data.setdefault('format', 'paperback')
+        data.setdefault('order', '-added')
+        super().__init__(data, *args, **kwargs)
+
+    class Meta:
+        model = Invoice
+        fields = ['invoice_number']
