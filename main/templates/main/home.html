@@ -20,6 +20,11 @@
             {% render_field filter.form.name class="form-control" %}
           </div>
 
+          <div class="form-group col-sm-4 col-md-3">
+            {{ filter.form.status.label_tag }}
+            {% render_field filter.form.status class="form-control" %}
+          </div>
+
           <div class="form-group col-sm-4 col-md-3 ">
             <div class="">
               <label for="search-number">النتائج</label>
@@ -67,8 +72,7 @@
         <tr>
           <th scope="col">#</th>
           <th>اسم الشركة</th>
-          <th>Last name</th>
-          <th>Phone</th>
+          <th>الحالة</th>
           <th>Actions</th>
         </tr>
         </thead>
@@ -76,9 +80,14 @@
         {% for company in response %}
           <tr>
             <th scope="row"> {{ forloop.counter }} </th>
-            <td> <a class="second after" href="{% url "company-detail" company.uid %}">{{ company.name }}</a></td>
-            <td>{{ parent.last_name }}</td>
-            <td>{{ parent.phone }}</td>
+            <td><a class="second after" href="{% url "company-detail" company.uid %}">{{ company.name }}</a></td>
+
+            <td>{% if company.status == 1 %}
+              <span class="badge badge-success">فعال</span>
+            {% else %}
+              <span class="badge badge-danger">غير فعال</span>
+            {% endif %}
+            </td>
 
 
             <td>
@@ -135,7 +144,7 @@
 
                           <td>
                             <input type="button" name="visit" value="" class="fas fa-child btn btn-sm btn-warning"
-                                   onclick="location='visit_start/{{ parent.uid }}'">
+                                   onclick="location='{% url 'company-invoice-list' company.uid %}'">
                           </td>
 
                           <td>

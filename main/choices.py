@@ -5,9 +5,10 @@ INACTIVE = 2
 DELETED = 3
 
 STATUS_CHOICE = (
-    (ACTIVE, "Active"),
-    (INACTIVE, "INACTIVE"),
-    (DELETED, "Deleted"),
+    (ACTIVE, "فعال"),
+    (INACTIVE, "غير فعال"),
+    # (DELETED, "Deleted"),
+# ('', 'الكل'),
 )
 
 

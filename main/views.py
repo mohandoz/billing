@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.views import generic
 from .choices import *
 # from .forms import MaterialForm, MaterlModelFormset
-from .forms import InvoiceForm, InvoiceDetailForm, InvoiceDetailFormSet, InvoiceUpdateFormSet, MaterialForm
+from .forms import InvoiceForm, InvoiceUpdateForm, InvoiceDetailForm, InvoiceDetailFormSet, InvoiceUpdateFormSet, MaterialForm
 from django.db import transaction
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -24,6 +24,9 @@ from weasyprint.fonts import FontConfiguration
 from django.template.loader import render_to_string
 
 from django.conf import settings
+from django.shortcuts import redirect
+from django.contrib import messages
+
 
 @login_required
 def home(request):
@@ -42,7 +45,7 @@ def home(request):
         else:
             search_option = 10
 
-        companies_list = Company.objects.filter(status=ACTIVE).order_by('name')
+        companies_list = Company.objects.all().order_by('status')
         companies_filter = CompaniesFilter(request.GET, queryset=companies_list)
 
         # paginator = Paginator(parent_filter.qs, 20)
@@ -111,14 +114,22 @@ class BranchCreateView(LoginRequiredMixin, generic.CreateView):
     model = Branch
     fields = ["name", ]
 
+
     def dispatch(self, request, *args, **kwargs):
         company_uid = kwargs.get("uid")
         self.company = get_object_or_404(Company, uid=company_uid)
         return super().dispatch(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super(BranchCreateView, self).get_context_data(**kwargs)
+        company = self.company
+        context['company'] = company
+        return context
+
     def form_valid(self, form):
         form.instance.company = self.company
         return super().form_valid(form)
+
 
 
 class BranchUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -161,6 +172,11 @@ class InvoiceCreateView(LoginRequiredMixin, InvoiceMixin, FormsetMixin, generic.
     def dispatch(self, request, *args, **kwargs):
         branch = kwargs.get("uid")
         self.branch = get_object_or_404(Branch, uid=branch)
+        if self.branch.status == INACTIVE:
+            messages.error(request, 'المنشئة غير فعالة')
+
+            return redirect('company-detail', uid=self.branch.company.uid)
+
         return super().dispatch(request, *args, **kwargs)
 
     def get_initial(self):
@@ -176,89 +192,6 @@ class InvoiceCreateView(LoginRequiredMixin, InvoiceMixin, FormsetMixin, generic.
         return context
 
 
-# class InvoiceCreateView(generic.CreateView):
-#     model = InvoiceDetail
-#     # fields = ["material", "qtn", "price", "delivery_date", "output_number"]
-#     template_name = 'main/invoice_form.html'
-#     form_class = InvoiceDetailFormSet
-#
-#
-#
-#     def dispatch(self, request, *args, **kwargs):
-#         branch = kwargs.get("uid")
-#         self.branch = get_object_or_404(Branch, uid=branch)
-#         print("dispacth")
-#         return super().dispatch(request, *args, **kwargs)
-#
-#     def form_invalid(self, form):
-#         print(form.errors)
-#         return super(InvoiceCreateView, self).form_invalid(form)
-
-
-    # def form_valid(self, form):
-    #     print("form_valid")
-    #     print(self.object)
-    #     context = self.get_context_data()
-    #     formset = context['formset']
-    #
-        # branch_uid = self.kwargs.get("uid")
-        # branch = get_object_or_404(Branch, uid=branch_uid)
-    #
-    #
-    #
-    #     with transaction.atomic():
-    #         from uuid import uuid4
-    #         x = str(uuid4())
-    #         invoice = Invoice.objects.create(branch=self.branch, invoice_number=x[:5])
-    #
-    #
-    #         if  form.is_valid() and formset.is_valid():
-    #             formset.save(commit=False)
-    #
-    #             for form in formset:
-    #                 form.save(commit=False)
-    #                 form.invoice = invoice
-    #                 # form.save()
-    #
-    #             formset.instance = self.object
-    #             formset.save()
-    #             print("Valid")
-    #         else:
-    #             print("invalid")
-    #
-    #             print(formset.errors)
-    #             return self.form_invalid(form)
-    #         print("return")
-    #     return super(InvoiceCreateView, self).form_valid(form)
-
-    # def form_valid(self, form):
-    #     context = self.get_context_data()
-    #     formset = context['formset']
-    #
-    #     branch_uid = self.kwargs.get("uid")
-    #     branch = get_object_or_404(Branch, uid=branch_uid)
-    #
-    #     from uuid import uuid4
-    #     x = str(uuid4())
-    #     invoice = Invoice.objects.create(branch=self.branch, invoice_number=x[:5])
-    #
-    #     with transaction.atomic():
-    #         form.instance.invoice = invoice
-    #         self.object = form.save()
-    #
-    #         if formset.is_valid():
-    #             formset.instance.invoice = invoice
-    #             formset.save()
-    #     return super(InvoiceCreateView, self).form_valid(form)
-    #
-    #
-    # def get_context_data(self, **kwargs):
-    #     context = super(InvoiceCreateView, self).get_context_data(**kwargs)
-    #     if self.request.POST:
-    #         context['form'] = InvoiceDetailFormSet(self.request.POST)
-    #     else:
-    #         context['form'] = InvoiceDetailFormSet()
-    #     return context
 
 
 class InvoiceDetailView(generic.DetailView):
@@ -292,7 +225,7 @@ class InvoiceUpdateView(LoginRequiredMixin, InvoiceMixin, FormsetMixin, generic.
     is_update_view = True
     template_name = 'main/invoice_update_form.html'
     model = Invoice
-    form_class = InvoiceForm
+    form_class = InvoiceUpdateForm
     formset_class = InvoiceUpdateFormSet
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
@@ -321,8 +254,9 @@ class InvoiceListView(FilteredListView):
 
 
 
-class BranchInvoiceListView(LoginRequiredMixin, generic.ListView):
+class BranchInvoiceListView(LoginRequiredMixin, FilteredListView):
     model = Invoice
+    filterset_class = InvoiceFilterSet
     paginate_by = 10
 
     def dispatch(self, request, *args, **kwargs):
@@ -331,13 +265,38 @@ class BranchInvoiceListView(LoginRequiredMixin, generic.ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return self.branch.invoices.all().order_by("created")
+        qs = super().get_queryset()
+        return qs.filter(branch=self.branch)
 
     def get_context_data(self, **kwargs):
         context = super(BranchInvoiceListView, self).get_context_data(**kwargs)
         branch = self.branch
         context['branch'] = branch
         return context
+
+
+class CompanyInvoiceListView(LoginRequiredMixin, FilteredListView):
+    model = Invoice
+    filterset_class = InvoiceFilterSet
+    paginate_by = 10
+    template_name = 'main/invoice_list_company.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        company_uid = kwargs.get("uid")
+        self.company = get_object_or_404(Company, uid=company_uid)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(branch__company=self.company)
+
+
+    def get_context_data(self, **kwargs):
+        context = super(CompanyInvoiceListView, self).get_context_data(**kwargs)
+        company = self.company
+        context['company'] = company
+        return context
+
 
 class InvoicePdf(View):
     def get(self, request, uid):

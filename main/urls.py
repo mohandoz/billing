@@ -3,8 +3,7 @@ from .views import home, CompanyCreateView, CompanyDetailView, CompanyUpdateView
 from .views import BranchCreateView, BranchUpdateView
 from .views import MaterialListView, MaterialCreateView, MaterialUpdateView
 from .views import InvoiceCreateView, InvoiceDetailView, InvoiceUpdateView
-from .views import BranchInvoiceListView
-from .views import InvoiceListView
+from .views import InvoiceListView, BranchInvoiceListView, CompanyInvoiceListView
 from .views import InvoicePdf
 
 urlpatterns = [
@@ -25,12 +24,10 @@ urlpatterns = [
     path("branch/invoice/<uuid:uid>", InvoiceDetailView.as_view(), name="invoice-detail"),
     path("branch/invoice_update/<uuid:uid>", InvoiceUpdateView.as_view(), name="invoice-update"),
 
-    path("branch/<uuid:uid>/invoices", BranchInvoiceListView.as_view(), name="branch-invoice-list"),
-
     path("invoices/", InvoiceListView.as_view(), name="invoice-list"),
+    path("branch/<uuid:uid>/invoices", BranchInvoiceListView.as_view(), name="branch-invoice-list"),
+    path("company/<uuid:uid>/invoices", CompanyInvoiceListView.as_view(), name="company-invoice-list"),
 
     path("branch/invoice/<uuid:uid>/print", InvoicePdf.as_view(), name="invoice-print"),
-
-
 
 ]

@@ -19,6 +19,7 @@
         <tr>
           <th>اسم الشركة</th>
           <th>تاريخ</th>
+          <th>الحالة</th>
           <th>الخيارات</th>
 
         </tr>
@@ -29,6 +30,13 @@
           <td>{{ company.name }}</td>
 
           <td>{{ company.created | date:"Y/n/j  l" }}</td>
+
+          <td>{% if company.status == 1 %}
+            <span class="badge badge-success">فعال</span>
+          {% else %}
+            <span class="badge badge-danger">غير فعال</span>
+          {% endif %}
+          </td>
 
 
           <td>
@@ -60,22 +68,19 @@
                     <table class="table table-bordered  table-striped table-hover">
                       <thead class="thead-dark">
                       <tr>
-                        <th>تعديل</th>
                         <th>اضافة فرع</th>
+
+
                         <th>جميع الفواتير</th>
-                        <th>انشاءفاتورة</th>
+
                         {% if request.user.is_superuser %}
-                          <th>Birthday</th>
+                          <th>تعديل</th>
                         {% endif %}
                       </tr>
                       </thead>
                       <tbody>
                       <tr>
-                        <td>
-                          <input type="button" name="profile" value=""
-                                 class="fas fa-tools btn btn-sm btn-primary"
-                                 onclick="location='{% url 'company-update' company.uid %}'">
-                        </td>
+
 
                         <td>
                           <input type="button" name="whatsapp" value="&#xf232"
@@ -85,20 +90,18 @@
 
                         <td>
                           <input type="button" name="visit" value="" class="fas fa-child btn btn-sm btn-warning"
-                                 onclick="location='visit_start/{{ parent.uid }}'">
+                                 onclick="location='{% url 'company-invoice-list' company.uid %}'">
                         </td>
 
-                        <td>
-                          <input type="button" name="event" value="" class="fas fa-star btn btn-sm btn-info"
-                                 onclick="location='{% url 'invoice-create' company.uid %}'">
-                        </td>
                         {% if request.user.is_superuser %}
+
                           <td>
-                            <input type="button" name="birthday" value=""
-                                   class="fas fa-birthday-cake btn btn-sm btn-dark"
-                                   onclick="location='birthday_register/{{ parent.uid }}'">
+                            <input type="button" name="profile" value=""
+                                   class="fas fa-tools btn btn-sm btn-primary"
+                                   onclick="location='{% url 'company-update' company.uid %}'">
                           </td>
                         {% endif %}
+
                       </tr>
 
                       </tbody>
@@ -132,6 +135,7 @@
         <tr>
           <th>اسم الفرع</th>
           <th>تاريخ</th>
+          <th>الحالة</th>
           <th>الخيارات</th>
         </tr>
         </thead>
@@ -146,6 +150,13 @@
 
             <td>{{ branch.created | date:"Y/n/j  l" }}</td>
 
+
+            <td>{% if branch.status == 1 %}
+              <span class="badge badge-success">فعال</span>
+            {% else %}
+              <span class="badge badge-danger">غير فعال</span>
+            {% endif %}
+            </td>
             <td>
 
 
@@ -175,35 +186,45 @@
                       <table class="table table-bordered  table-striped table-hover">
                         <thead class="thead-dark">
                         <tr>
-                          <th>تعديل</th>
-                          <th>الافرع</th>
-                          <th>جميع الفواتير</th>
                           <th>فاتورة جديدة</th>
+                          <th>جميع الفواتير</th>
+
+                          {% if request.user.is_superuser %}
+                            <th>تعديل</th>
+                          {% endif %}
+
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                          <td>
-                            <input type="button" name="profile" value=""
-                                   class="fas fa-tools btn btn-sm btn-primary"
-                                   onclick="location='{% url 'branch-update' branch.uid %}'">
-                          </td>
 
                           <td>
-                            <input type="button" name="whatsapp" value="&#xf232"
-                                   class="fab fa-whatsapp btn btn-sm btn-success"
-                                   onclick=" window.open('{{ parent.whatsapp }}', '_blank'); return false;">
+                            {% if company.status == 1 %}
+                              {% if branch.status == 1 %}
+                                <input type="button" name="event" value="" class="fas fa-star btn btn-sm btn-info"
+                                       onclick="location='{% url 'invoice-create' branch.uid %}'">
+                              {% else %}
+                                <span class="badge badge-danger">الفرع غير فعال </span>
+                              {% endif %}
+                            {% else %}
+                              <span class="badge badge-danger">الشركة غير فعالة</span>
+                            {% endif %}
                           </td>
 
                           <td>
                             <input type="button" name="visit" value="" class="fas fa-child btn btn-sm btn-warning"
-                                   onclick="location='visit_start/{{ parent.uid }}'">
+                                   onclick="location='{% url "branch-invoice-list" branch.uid %}'">
                           </td>
 
-                          <td>
-                            <input type="button" name="event" value="" class="fas fa-star btn btn-sm btn-info"
-                                   onclick="location='{% url 'invoice-create' branch.uid %}'">
-                          </td>
+
+                          {% if request.user.is_superuser %}
+
+                            <td>
+                              <input type="button" name="profile" value=""
+                                     class="fas fa-tools btn btn-sm btn-primary"
+                                     onclick="location='{% url 'branch-update' branch.uid %}'">
+                            </td>
+                          {% endif %}
                         </tr>
 
                         </tbody>
@@ -226,7 +247,7 @@
 
         {% empty %}
           <tr>
-            <td>
+            <td colspan="20">
               لا يوجد افرع
             </td>
           </tr>

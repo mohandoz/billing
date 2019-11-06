@@ -7,18 +7,20 @@
 
 {% block title %} اضافة فرع {% endblock title %}
 {% block content_header %} اضافة فرع {% endblock %}
-{% block content_right_active %} اضافة فرع{% endblock %}
+{% block content_right_active %}  <a href="{% url 'company-detail' company.uid %}">عودة للشركة</a> {% endblock %}
 
 {% block content %}
 
 
-    <div class="card">
+  <div class="card">
     <div class="card-body">
       <form method="post">{% csrf_token %}
         {{ form | crispy }}
-        <input type="submit" value="اضافة">
+        <input type="submit" class="btn btn-success" value="حفظ">
       </form>
     </div>
+  </div>
+
 
 
 {% endblock content %}

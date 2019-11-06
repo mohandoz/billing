@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from model_utils.models import TimeStampedModel
-from django.urls import reverse
 import uuid
 import datetime
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -14,8 +13,8 @@ from django.db import IntegrityError
 
 class Company(TimeStampedModel):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    name = models.CharField(max_length=30, unique=True)
-    status = models.PositiveIntegerField(choices=STATUS_CHOICE, default=ACTIVE)
+    name = models.CharField(max_length=30, unique=True, verbose_name="اسم الشركة")
+    status = models.PositiveIntegerField(choices=STATUS_CHOICE, default=ACTIVE, verbose_name="الحالة")
 
     def get_absolute_url(self):
         # return reverse('customer_profile', args=[str(self.uid)])
@@ -31,8 +30,8 @@ class Company(TimeStampedModel):
 class Branch(TimeStampedModel):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="branches")
-    name = models.CharField(max_length=30)
-    status = models.PositiveIntegerField(choices=STATUS_CHOICE, default=ACTIVE)
+    name = models.CharField(max_length=30, verbose_name="اسم الفرع")
+    status = models.PositiveIntegerField(choices=STATUS_CHOICE, default=ACTIVE, verbose_name="الحالة")
 
     def get_absolute_url(self):
         return reverse("company-detail", args=[str(self.company.uid)])
@@ -46,8 +45,8 @@ class Branch(TimeStampedModel):
 
 class Material(TimeStampedModel):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    name = models.CharField(max_length=30)
-    status = models.PositiveIntegerField(choices=STATUS_CHOICE, default=ACTIVE)
+    name = models.CharField(max_length=30,  verbose_name="اسم المادة")
+    status = models.PositiveIntegerField(choices=STATUS_CHOICE, default=ACTIVE, verbose_name="الحالة")
 
     def get_absolute_url(self):
         return reverse("material-list")
@@ -60,8 +59,10 @@ class Invoice(TimeStampedModel):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_by = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name="invoices")
-    invoice_number = models.CharField(max_length=20, blank=True,unique=True)
-    print_count = models.PositiveIntegerField(default=0)
+    invoice_number = models.CharField(max_length=20, blank=True,unique=True,  verbose_name="رقم الفاتورة")
+    print_count = models.PositiveIntegerField(default=0,  verbose_name="عداد الطباعة")
+    status = models.PositiveIntegerField(choices=STATUS_CHOICE, default=ACTIVE, verbose_name="الحالة")
+
 
     def save(self, *args, **kwargs):
         if not self.invoice_number:
@@ -100,11 +101,11 @@ class InvoiceDetail(TimeStampedModel):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="invoice_details")
     material = models.ForeignKey(Material, on_delete=models.CASCADE, related_name="invoice_details")
-    quantity = models.PositiveIntegerField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
-    total = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
-    delivery_date = models.DateField()
-    output_number = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(verbose_name="الكمية")
+    price = models.DecimalField(max_digits=6, decimal_places=2,  verbose_name="السعر")
+    total = models.DecimalField(max_digits=6, decimal_places=2, blank=True,  verbose_name="الاجمالي")
+    delivery_date = models.DateField(verbose_name="تاريخ التسليم")
+    output_number = models.PositiveIntegerField(verbose_name="رقم الاخراج")
 
     def get_absolute_url(self):
         return reverse("material-order-detail",  args=[str(self.uid)])

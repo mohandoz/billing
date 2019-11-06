@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% load widget_tweaks %}
 {% load custom_tags %}
+{% load crispy_forms_tags %}
 
 
 {% block title %}الفرع{% endblock title %}
@@ -12,13 +13,25 @@
 {% block content %}
 
 
-
-  <div class="card">
+    <div class="card">
     <div class="card-body">
       <input type="button" value="   فاتورة جديدة " class="fas fa-plus-square btn btn-success my-modal-wrapper"
              onclick="location='{% url 'invoice-create' branch.uid %}'">
     </div>
   </div>
+
+  <div class="card">
+    <div class="card-body">
+
+      <form action="" method="get">
+        {{ filterset.form | crispy }}
+        <input type="submit" class="btn btn-success" value="بحث"/>
+      </form>
+
+    </div>
+  </div>
+
+
 
   <div class="card">
     <div class="card-body">
@@ -30,7 +43,7 @@
           <th>تعديل</th>
           <th>pdf</th>
           <th>عداد الطباعة</th>
-          <th>created by</th>
+          <th>المستخدم</th>
 
         </tr>
         </thead>
@@ -85,6 +98,34 @@
       </table>
 
     </div>
+      <div class="pagination align-self-center">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link disabled">&laquo;</a></li>
+          {% endif %}
+          {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+              <li class="page-item active"><a class="page-link">{{ i }}</a></li>
+
+            {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if response.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+
+          {% else %}
+            <li class="page-item"><a class="page-link disabled">&raquo;</a></li>
+          {% endif %}
+
+
+        </ul>
+      </nav>
+    </div>
+
   </div>
 
 {% endblock content %}

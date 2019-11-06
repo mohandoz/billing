@@ -10,46 +10,6 @@ from django.forms import BaseInlineFormSet
 #=================== material form ==========================
 
 
-# class MaterialForm(ModelForm):
-#
-#     class Meta:
-#         model = Material
-#         fields = ('name',)
-#
-#     def clean_name(self):
-#         name = self.cleaned_data.get('name')
-#         if name == "":
-#             raise forms.ValidationError("Enter name")
-#         return name
-#
-#     # make sure the that form is not empty
-#     def __init__(self, *arg, **kwarg):
-#         super(MaterialForm, self).__init__(*arg, **kwarg)
-#         self.empty_permitted = False
-#
-# class InvoiceMaterialForm(ModelForm):
-#
-#     class Meta:
-#         model = InvoiceMaterial
-#         fields = ('qtn', 'price', 'delivery_date', 'output_number')
-#
-#
-#     # make sure the that form is not empty
-#     def __init__(self, *arg, **kwarg):
-#         super(InvoiceMaterialForm, self).__init__(*arg, **kwarg)
-#         self.empty_permitted = False
-# #
-#
-# # =================== material formset  ==========================
-#
-#
-# MaterlModelFormset = modelformset_factory(
-#     Material,
-#     form=MaterialForm,
-#     extra=1,
-# )
-
-
 class MaterialForm(ModelForm):
 
     class Meta:
@@ -75,6 +35,15 @@ class InvoiceForm(ModelForm):
         widgets = {'branch': forms.HiddenInput(), 'created_by': forms.HiddenInput(), }
 
 
+class InvoiceUpdateForm(ModelForm):
+    class Meta:
+        model = Invoice
+        fields = ('branch', 'created_by', 'status')
+        widgets = {'branch': forms.HiddenInput(), 'created_by': forms.HiddenInput(), }
+
+        labels={
+            'status': "الحالة"
+        }
 
 
 
@@ -84,7 +53,7 @@ class InvoiceDetailForm(ModelForm):
 
     class Meta:
         model = InvoiceDetail
-        fields = ('material','quantity', 'price', 'delivery_date', 'output_number')
+        fields = ('material', 'quantity', 'price', 'delivery_date', 'output_number')
 
     def __init__(self, *arg, **kwarg):
         super(InvoiceDetailForm, self).__init__(*arg, **kwarg)
