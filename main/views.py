@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from .models import Company, Branch, Material, Invoice, InvoiceDetail
-from .filters import CompaniesFilter, FilteredListView, InvoiceFilterSet
+from .filters import FilteredListView, CompaniesFilter, BranchFilter, InvoiceFilterSet
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.shortcuts import get_object_or_404
@@ -140,6 +140,17 @@ class BranchUpdateView(LoginRequiredMixin, generic.UpdateView):
     slug_field = 'uid'
     slug_url_kwarg = 'uid'
 
+class BranchListView(LoginRequiredMixin, FilteredListView):
+    model = Branch
+    filterset_class = BranchFilter
+    paginate_by = 10
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.order_by("status")
+
+
+
 
 #  Materials
 
@@ -250,7 +261,7 @@ class InvoiceListView(FilteredListView):
     model = Invoice
     filterset_class = InvoiceFilterSet
     paginate_by = 10
-    template_name = 'main/invoice_all_list.html'
+    template_name = 'main/invoice_list_all.html'
 
 
 
@@ -266,7 +277,7 @@ class BranchInvoiceListView(LoginRequiredMixin, FilteredListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(branch=self.branch)
+        return qs.filter(branch=self.branch).order_by("status")
 
     def get_context_data(self, **kwargs):
         context = super(BranchInvoiceListView, self).get_context_data(**kwargs)
@@ -326,6 +337,38 @@ class InvoicePdf(View):
         invoice.save()
 
         return response
+
+class InvoiceHtml(View):
+    def get(self, request, uid):
+        invoice = get_object_or_404(Invoice, uid=uid)
+        invoice_details = invoice.invoice_details.all()
+        grand_total = Decimal(0.0)
+
+        for item in invoice_details:
+            grand_total += item.total
+
+        response = HttpResponse(content_type="application/pdf")
+        # response['Content-Disposition'] = f"inline; filename={invoice.invoice_number}.pdf"
+
+
+        html = render_to_string("main/weasy.html", {
+            'invoice': invoice,
+            'invoice_details': invoice_details,
+            'grand_total': grand_total,
+            'settings': settings.STATIC_URL,
+
+        })
+
+        # font_config = FontConfiguration()
+        HTML(string=html).write_pdf(response, stylesheets=[f"{settings.STATIC_ROOT}/css/invoice.css"])
+
+        return  render(request, 'main/weasy_preview.html', {
+            'invoice': invoice,
+            'invoice_details': invoice_details,
+            'grand_total': grand_total,
+            'settings': settings.STATIC_URL,
+        })
+
 
 
 

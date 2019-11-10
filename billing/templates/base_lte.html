@@ -67,7 +67,7 @@
   {% endblock head %}
 </head>
 
-<body class="hold-transition sidebar-mini " >
+<body class="hold-transition sidebar-mini ">
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -254,34 +254,28 @@
             <!-- Add icons to the links using the .nav-icon class
                  with font-awesome or any other icon font library -->
 
-            <li class="nav-item">
-              <a href=""
-                 class="nav-link {% if request.resolver_match.url_name  == 'dashboard' %}active{% endif %}">
-                <i class="fas fa-tachometer-alt nav-icon"></i>
-                <p>Dashboard</p>
-              </a>
-            </li>
-            <li class="nav-item has-treeview {% active_menu request "search register" %}">
-              <a href="#" class="nav-link {% active request "search register" %}">
-                <i class="nav-icon fas fa-home"></i>
+            <li class="nav-item has-treeview {% active_menu request "home company-create" %}">
+              <a href="#" class="nav-link {% active request "home company-create" %}">
+                <i class="nav-icon fas fa-building"></i>
                 <p>
-                  Reception
+                  الشركات
                   <i class="right fas fa-angle-left"></i>
                 </p>
               </a>
               <ul class="nav nav-treeview">
 
-                <li class="nav-item">
-                  <a href="" class="nav-link">
-                    <i class="fas fa-user-plus nav-icon"></i>
-                    <p>Register</p>
+
+                <li class="nav-item ">
+                  <a href="{% url 'home' %}" class="nav-link {% active request "home" %}">
+                    <i class="fas fa-search nav-icon"></i>
+                    <p>جميع الشركات</p>
                   </a>
                 </li>
 
-                <li class="nav-item ">
-                  <a href="" class="nav-link">
-                    <i class="fas fa-search nav-icon"></i>
-                    <p>Search</p>
+                <li class="nav-item">
+                  <a href="{% url 'company-create' %}" class="nav-link {% active request "company-create" %}">
+                    <i class="fas fa-plus-square nav-icon"></i>
+                    <p>اضافة شركة</p>
                   </a>
                 </li>
 
@@ -289,54 +283,33 @@
               </ul>
             </li>
             <li
-              class="nav-item has-treeview">
-              <a href="#" class="nav-link ">
-                <i class="nav-icon fas fa-users"></i>
+              class="nav-item has-treeview {% active_menu request "branch-list" %}">">
+              <a href="#" class="nav-link {% active request "branch-list" %} ">
+                <i class="nav-icon fas fa-warehouse  "></i>
                 <p>
-                  Visits
-                  <i class="fas fa-angle-left right"></i>
+                  الافرع
+                  <i class="fas fa-angle-left right {% active request "branch-list" %}"></i>
                 </p>
               </a>
               <ul class="nav nav-treeview">
 
                 <li class="nav-item">
-                  <a href="" class="nav-link">
+                  <a href="{% url 'branch-list' %}" class="nav-link {% active request "branch-list" %} " >
                     <i class="far fa-calendar-alt nav-icon"></i>
                     <p>
-                      All visits
-                      {#                      <span class="badge badge-info right">7</span>#}
-                    </p>
-                  </a>
-                </li>
-
-
-                <li class="nav-item">
-                  <a href="" class="nav-link  ">
-                    <i class="far fa-calendar-check nav-icon"></i>
-                    <p>
-                      Active visits
-                      {#                      <span class="badge badge-success right">2</span>#}
-                    </p>
-                  </a>
-                </li>
-
-                <li class="nav-item">
-                  <a href="" class="nav-link ">
-                    <i class="far fa-calendar-times nav-icon"></i>
-                    <p>
-                      Overdue visits
-                      {#                      <span class="badge badge-danger right">5</span>#}
+                      جميع الافرع
                     </p>
                   </a>
                 </li>
 
               </ul>
+
             </li>
             <li class="nav-item has-treeview ">
               <a href="#" class="nav-link  ">
                 <i class="nav-icon fas fa-star"></i>
                 <p>
-                  Events
+                  الفواتير
                   <i class="fas fa-angle-left right"></i>
                 </p>
               </a>
@@ -344,27 +317,12 @@
 
 
                 <li class="nav-item">
-                  <a href="" class="nav-link">
+                  <a href="{% url 'invoice-list' %}" class="nav-link">
                     <i class="fas fa-list nav-icon"></i>
-                    <p>List Events</p>
+                    <p>جميع الفواتير </p>
                   </a>
                 </li>
 
-                {% if request.user.is_superuser %}
-                  <li class="nav-item">
-                    <a href="" class="nav-link ">
-                      <i class="far fa-calendar-alt nav-icon"></i>
-                      <p>Create Event</p>
-                    </a>
-                  </li>
-                {% endif %}
-
-                {#                <li class="nav-item">#}
-                {#                  <a href="pages/forms/editors.html" class="nav-link">#}
-                {#                    <i class="fas fa-circle-o nav-icon"></i>#}
-                {#                    <p>All events</p>#}
-                {#                  </a>#}
-                {#                </li>#}
 
               </ul>
             </li>
@@ -526,7 +484,7 @@
                        class="nav-link ">
                       <i class="far fa-calendar-times nav-icon"></i>
                       <p>
-                       Birthday
+                        Birthday
                       </p>
                     </a>
                   </li>

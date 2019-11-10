@@ -5,9 +5,9 @@
 {% load crispy_forms_tags %}
 
 
-{% block title %}المواد{% endblock title %}
-{% block content_header %}{{ branch }} {% endblock %}
-{% block content_right_active %} {{ branch.company }} {% endblock %}
+{% block title %}جميع الفواتير{% endblock title %}
+{% block content_header %}جميع الفواتير{% endblock %}
+{% block content_right_active %} جميع الفواتير{% endblock %}
 
 {% block content %}
 
@@ -16,7 +16,7 @@
     <div class="card-body">
 
       <form action="" method="get">
-        {{ filterset.form | crispy}}
+        {{ filterset.form | crispy }}
 
         <input type="submit" class="btn btn-success" value="بحث"/>
       </form>
@@ -31,10 +31,15 @@
         <tr>
           <th>رقم الفاتورة</th>
           <th>الحالة</th>
-          <th>تعديل</th>
-          <th>pdf link</th>
-          <th>print count</th>
-          <th>created by</th>
+
+
+          <th>معاينة الفاتورة</th>
+          <th>طباعة</th>
+          <th>عداد الطباعة</th>
+          <th>المستخدم</th>
+          {% if request.user.is_superuser %}
+            <th>تعديل</th>
+          {% endif %}
 
         </tr>
         </thead>
@@ -48,27 +53,41 @@
             </td>
 
 
-            <td>{% if object.status == 1 %}
-              <span class="badge badge-success">فعال</span>
-            {% else %}
-              <span class="badge badge-danger">غير فعال</span>
-            {% endif %}
-            </td>
-
             <td>
-
-
-              <input type="button" value="" class="fas fa-cog btn btn-default my-modal-wrapper"
-                     onclick="location='{% url 'material-update' object.uid %}'">
-
+              {% if object.status == 1 %}
+                <span class="badge badge-success">فعال</span>
+              {% else %}
+                <span class="badge badge-danger">غير فعال</span>
+              {% endif %}
             </td>
+
+
+            <th><input type="button" value="" class="fas fa-cog btn btn-default my-modal-wrapper"
+                       onclick=" window.open('{% url 'invoice-preview' object.uid %}', '_blank'); return false;">
+
+            </th>
+            <th>
+              <input type="button" value="" class="fas fa-print btn btn-default my-modal-wrapper"
+                     onclick="printJS('{% url 'invoice-print' object.uid %}')">
+
+            </th>
+            <th>{{ object.print_count }}</th>
+            <th>{{ object.created_by }}</th>
+
+            {% if request.user.is_superuser %}
+              <td>
+                <input type="button" value="" class="fas fa-cog btn btn-default my-modal-wrapper"
+                       onclick="location='{% url 'invoice-update' object.uid %}'">
+              </td>
+            {% endif %}
+
 
           </tr>
 
         {% empty %}
           <tr>
             <td colspan="20">
-              لا يوجد مواد
+              لا يوجد فواتير
             </td>
           </tr>
 
@@ -123,11 +142,11 @@
 {% block js %}
   <script>
     var csrf_token = '{{ csrf_token }}';
-    {#var register_url = "{% url "register" %}"#}
 
 
   </script>
+  <script src="{% static 'js/print.min.js' %}"></script>
 
-  <script type="text/javascript" src="{% static 'js/reception.js' %}"></script>
+
 
 {% endblock js %}

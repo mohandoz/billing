@@ -8,23 +8,6 @@ from . import choices
 # https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html
 
 
-class CompaniesFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(lookup_expr='icontains', label="الاسم")
-    status = django_filters.ChoiceFilter(label="الحالة", choices=choices.STATUS_CHOICE, empty_label="الكل")
-
-    def __init__(self, data, *args, **kwargs):
-        data = data.copy()
-        data.setdefault('format', 'paperback')
-        data.setdefault('order', '-added')
-
-        # if not data['status']:
-        #     data['status'] = choices.ACTIVE
-
-        super().__init__(data, *args, **kwargs)
-    class Meta:
-        model = Company
-        fields = ['name', 'status']
-
 
 
 
@@ -47,6 +30,40 @@ class FilteredListView(generic.ListView):
         # Pass the filterset to the template - it provides the form.
         context['filterset'] = self.filterset
         return context
+
+
+class CompaniesFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(lookup_expr='icontains', label="الاسم")
+    status = django_filters.ChoiceFilter(label="الحالة", choices=choices.STATUS_CHOICE, empty_label="الكل")
+
+    def __init__(self, data, *args, **kwargs):
+        data = data.copy()
+        data.setdefault('format', 'paperback')
+        data.setdefault('order', '-added')
+
+        # if not data['status']:
+        #     data['status'] = choices.ACTIVE
+
+        super().__init__(data, *args, **kwargs)
+    class Meta:
+        model = Company
+        fields = ['name', 'status']
+
+class BranchFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(lookup_expr='icontains', label="الاسم")
+
+    def __init__(self, data, *args, **kwargs):
+        data = data.copy()
+        data.setdefault('format', 'paperback')
+        data.setdefault('order', '-added')
+
+        # if not data['status']:
+        #     data['status'] = choices.ACTIVE
+
+        super().__init__(data, *args, **kwargs)
+    class Meta:
+        model = Company
+        fields = ['name',]
 
 
 class InvoiceFilterSet(django_filters.FilterSet):

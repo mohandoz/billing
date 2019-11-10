@@ -83,9 +83,14 @@
 
 
                         <td>
+                        {% if company.status == 1 %}
                           <input type="button" name="whatsapp" value="&#xf232"
                                  class="fab fa-whatsapp btn btn-sm btn-success"
                                  onclick="location='{% url 'branch-create' company.uid %}'">
+                        {% else %}
+                          <span class="badge badge-danger">الشركة غير فعالة</span>
+                        {% endif %}
+
                         </td>
 
                         <td>

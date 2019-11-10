@@ -1,10 +1,10 @@
 from django.urls import path
 from .views import home, CompanyCreateView, CompanyDetailView, CompanyUpdateView
-from .views import BranchCreateView, BranchUpdateView
+from .views import BranchListView, BranchCreateView, BranchUpdateView
 from .views import MaterialListView, MaterialCreateView, MaterialUpdateView
 from .views import InvoiceCreateView, InvoiceDetailView, InvoiceUpdateView
 from .views import InvoiceListView, BranchInvoiceListView, CompanyInvoiceListView
-from .views import InvoicePdf
+from .views import InvoicePdf, InvoiceHtml
 
 urlpatterns = [
     path("", home, name="home"),
@@ -20,6 +20,7 @@ urlpatterns = [
     path("material/create", MaterialCreateView.as_view(), name="material-create"),
     path("material/<uuid:uid>/edit", MaterialUpdateView.as_view(), name="material-update"),
 
+    path("branches", BranchListView.as_view(), name="branch-list"),
     path("branch/<uuid:uid>/invoice_create", InvoiceCreateView.as_view(), name="invoice-create"),
     path("branch/invoice/<uuid:uid>", InvoiceDetailView.as_view(), name="invoice-detail"),
     path("branch/invoice_update/<uuid:uid>", InvoiceUpdateView.as_view(), name="invoice-update"),
@@ -29,5 +30,6 @@ urlpatterns = [
     path("company/<uuid:uid>/invoices", CompanyInvoiceListView.as_view(), name="company-invoice-list"),
 
     path("branch/invoice/<uuid:uid>/print", InvoicePdf.as_view(), name="invoice-print"),
+    path("branch/invoice/<uuid:uid>/preview", InvoiceHtml.as_view(), name="invoice-preview"),
 
 ]

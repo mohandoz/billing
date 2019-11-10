@@ -5,26 +5,23 @@
 {% load crispy_forms_tags %}
 
 
-{% block title %}الفرع{% endblock title %}
-{% block content_header %}
-  جميع الفواتير
-  <br>
-  {{ company }} {% endblock %}
-{% block content_right_active %}
-  <a href="{% url 'company-detail' company.uid %}">{{ company }} </a> {% endblock %}
+{% block title %}جميع الافرع{% endblock title %}
+{% block content_header %}جميع الافرع {% endblock %}
+{% block content_right_active %} جميع الافرع {% endblock %}
 
 {% block content %}
 
 
-  <form action="" method="get">
-    {{ filterset.form | crispy}}
-    <input type="submit" class="btn btn-success" value="بحث"/>
-  </form>
   <div class="card">
-{#    <div class="card-body">#}
-{#      <input type="button" value="   فاتورة جديدة " class="fas fa-plus-square btn btn-success my-modal-wrapper"#}
-{#             onclick="location='{% url 'invoice-create' branch.uid %}'">#}
-{#    </div>#}
+    <div class="card-body">
+
+      <form action="" method="get">
+        {{ filterset.form | crispy }}
+
+        <input type="submit" class="btn btn-success" value="بحث"/>
+      </form>
+
+    </div>
   </div>
 
   <div class="card">
@@ -32,12 +29,13 @@
       <table class="table table-bordered  table-striped table-hover">
         <thead class="thead-dark">
         <tr>
-          <th>رقم الفاتورة</th>
+          <th>اسم الفرع</th>
           <th>الحالة</th>
-          <th>تعديل</th>
-          <th>pdf</th>
-          <th>عداد الطباعة</th>
-          <th>المستخدم</th>
+
+          {% if request.user.is_superuser %}
+            <th>تعديل</th>
+          {% endif %}
+
 
         </tr>
         </thead>
@@ -47,52 +45,48 @@
 
           <tr>
 
-            <td><a class="second after" href="{% url "invoice-detail" object.uid %}">{{ object.invoice_number }}</a>
+            <td>
+              <a class="second after" href="{% url "branch-invoice-list" object.uid %}">{{ object.name }}</a>
             </td>
 
 
-            <td>{% if object.status == 1 %}
-              <span class="badge badge-success">فعال</span>
-            {% else %}
-              <span class="badge badge-danger">غير فعال</span>
+            <td>
+              {% if object.status == 1 %}
+                <span class="badge badge-success">فعال</span>
+              {% else %}
+                <span class="badge badge-danger">غير فعال</span>
+              {% endif %}
+            </td>
+
+            {% if request.user.is_superuser %}
+              <td>
+
+                <input type="button" value="" class="fas fa-cog btn btn-default my-modal-wrapper"
+                       onclick="location='{% url 'branch-update' object.uid %}'">
+              </td>
             {% endif %}
-            </td>
 
-            <td>
-
-              <input type="button" value="" class="fas fa-cog btn btn-default my-modal-wrapper"
-                     onclick="location='{% url 'material-update' object.uid %}'">
-            </td>
-
-            <td>
-              {{ object.print_count }} idk
-            </td>
-
-            <td>
-              {{ object.print_count }}
-            </td>
-
-            <td>
-             {{ object.created_by }}
-            </td>
 
           </tr>
 
         {% empty %}
           <tr>
             <td colspan="20">
-              لا يوجد فواتير
+              لا يوجد افرع
             </td>
           </tr>
 
 
         {% endfor %}
+
+
         </tbody>
 
       </table>
 
     </div>
-      <div class="pagination align-self-center">
+
+    <div class="pagination align-self-center">
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           {% if page_obj.has_previous %}
@@ -119,7 +113,13 @@
         </ul>
       </nav>
     </div>
+
   </div>
+
+
+
+
+
 
 {% endblock content %}
 
@@ -127,8 +127,11 @@
 {% block js %}
   <script>
     var csrf_token = '{{ csrf_token }}';
+    {#var register_url = "{% url "register" %}"#}
+
 
   </script>
 
+  <script type="text/javascript" src="{% static 'js/reception.js' %}"></script>
 
 {% endblock js %}
