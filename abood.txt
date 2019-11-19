@@ -1,0 +1,23 @@
+sort items in bill by name
+pdf v 1-2-3 folder sub folder
+
+
+by default price in invoice is hidden, check box to show
+
+
+ejamli
+material
+qtn
+price
+number
+date
+
+
+
+invoce number to left
+
+remove invoice work and 3ard se3er
+
+
+branch next to company
+

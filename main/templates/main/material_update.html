@@ -6,8 +6,10 @@
 
 
 {% block title %} تعديل مادة {% endblock title %}
-{% block content_header %} تعديل مادة ال{{ object }} {% endblock %}
-{% block content_right_active %}  تعديل مادة ال{{ object }}  {% endblock %}
+{% block content_header %} تعديل مادة {{ object }} {% endblock %}
+{% block content_right_active %}
+  <a href="{% url 'material-list' %}">العودة لشاشة المواد</a>
+  {% endblock %}
 
 {% block content %}
 

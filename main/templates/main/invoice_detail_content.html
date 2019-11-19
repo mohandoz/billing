@@ -49,12 +49,12 @@
       <thead class="thead-dark">
       <tr>
         <th></th>
+        <th>اجمالي</th>
         <th>المادة</th>
         <th>الكمية</th>
         <th>السعر</th>
-        <th>اجمالي</th>
-        <th>تاريخ الاستلام</th>
         <th>رقم الاخراج</th>
+        <th>تاريخ الاستلام</th>
       </tr>
       </thead>
       <tbody>
@@ -62,31 +62,29 @@
       {% for detail in invoice.invoice_details.all %}
         <tr>
           <td class="rownum"></td>
+          <td class="number">{{ detail.total.normalize }} </td>
           <td>{{ detail.material }}</td>
           <td class="number">{{ detail.quantity }}</td>
-          <td class="number">{{ detail.price }} </td>
-          <td class="number">{{ detail.total }} </td>
-          <td class="number">{{ detail.delivery_date | date:"Y/m/d" }} </td>
+          <td class="number">{{ detail.price.normalize }} </td>
           <td class="number">{{ detail.output_number }} </td>
+          <td class="number">{{ detail.delivery_date | date:"Y/m/d" }} </td>
+
 
         </tr>
       {% endfor %}
       </tbody>
       <tfoot>
       <tr>
-        <td colspan="3"></td>
-        <th>sub_total</th>
-        <td class="number">{{ invoice.sub_total }} </td>
+        <td colspan=""><br/></td>
       </tr>
-      <tr>
-        <td colspan="3"></td>
-        <th>tax</th>
-        <td class="number">{{ invoice.tax }} </td>
-      </tr>
+      {#      <tr class="blank_row">#}
+      {#        <td colspan="3"></td>#}
+      {#      </tr>#}
+
       <tr>
         <td colspan="3"></td>
         <th>المجموع</th>
-        <td class="number">{{ grand_total }} </td>
+        <td class="number">{{ grand_total.normalize }} </td>
       </tr>
       </tfoot>
     </table>

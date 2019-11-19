@@ -26,6 +26,10 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.shortcuts import redirect
 from django.contrib import messages
+import os
+from .utils import check_folder_exist_create
+
+from django.core.exceptions import ValidationError
 
 
 @login_required
@@ -128,6 +132,14 @@ class BranchCreateView(LoginRequiredMixin, generic.CreateView):
 
     def form_valid(self, form):
         form.instance.company = self.company
+
+        # check branch if exsist
+        new_beanch_name = form.cleaned_data.get("name")
+
+        if self.company.branches.filter(name=new_beanch_name).exists():
+            messages.error(self.request, f"الفرع موجود")
+            return redirect("branch-create", uid=self.company.uid)
+
         return super().form_valid(form)
 
 
@@ -220,7 +232,7 @@ class InvoiceDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(InvoiceDetailView, self).get_context_data(**kwargs)
-        items = self.invoice.invoice_details.all()
+        items = self.invoice.invoice_details.all().order_by("material__name")
         grand_total = Decimal(0.0)
 
         for item in items:
@@ -309,10 +321,10 @@ class CompanyInvoiceListView(LoginRequiredMixin, FilteredListView):
         return context
 
 
-class InvoicePdf(View):
+class InvoicePdfView(View):
     def get(self, request, uid):
         invoice = get_object_or_404(Invoice, uid=uid)
-        invoice_details = invoice.invoice_details.all()
+        invoice_details = invoice.invoice_details.all().order_by("material")
         grand_total = Decimal(0.0)
 
         for item in invoice_details:
@@ -322,20 +334,48 @@ class InvoicePdf(View):
         response['Content-Disposition'] = f"inline; filename={invoice.invoice_number}.pdf"
 
 
-        html = render_to_string("main/weasy.html", {
+        template = render_to_string("main/weasy.html", {
             'invoice': invoice,
             'invoice_details': invoice_details,
             'grand_total': grand_total,
-            'settings': settings.STATIC_URL,
 
         })
 
-        font_config = FontConfiguration()
-        HTML(string=html).write_pdf(response, stylesheets=[f"{settings.STATIC_ROOT}/css/invoice.css"],font_config=font_config)
+        html = HTML(string=template)
+
+        html.write_pdf(response, stylesheets=[f"{settings.STATIC_ROOT}/css/weasy.css"])
+
 
         invoice.print_count += 1
         invoice.save()
 
+        return response
+
+
+class InvoicePdfWithoutPirceًView(View):
+    def get(self, request, uid):
+        invoice = get_object_or_404(Invoice, uid=uid)
+        invoice_details = invoice.invoice_details.all().order_by("material")
+        grand_total = Decimal(0.0)
+
+        for item in invoice_details:
+            grand_total += item.total
+
+        response = HttpResponse(content_type="application/pdf")
+        response['Content-Disposition'] = f"inline; filename={invoice.invoice_number}.pdf"
+
+
+        html = render_to_string("main/weasy_without_price.html", {
+            'invoice': invoice,
+            'invoice_details': invoice_details,
+            'grand_total': grand_total,
+
+        })
+
+        HTML(string=html).write_pdf(response, stylesheets=[f"{settings.STATIC_ROOT}/css/weasy.css"])
+
+        invoice.print_count += 1
+        invoice.save()
         return response
 
 class InvoiceHtml(View):
@@ -360,14 +400,14 @@ class InvoiceHtml(View):
         })
 
         # font_config = FontConfiguration()
-        HTML(string=html).write_pdf(response, stylesheets=[f"{settings.STATIC_ROOT}/css/invoice.css"])
+        HTML(string=html).write_pdf(response, stylesheets=[f"{settings.STATIC_ROOT}/css/weasy.css"])
 
         return  render(request, 'main/weasy_preview.html', {
             'invoice': invoice,
             'invoice_details': invoice_details,
             'grand_total': grand_total,
-            'settings': settings.STATIC_URL,
         })
+
 
 
 

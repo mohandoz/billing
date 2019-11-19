@@ -282,29 +282,30 @@
 
               </ul>
             </li>
-            <li
-              class="nav-item has-treeview {% active_menu request "branch-list" %}">">
-              <a href="#" class="nav-link {% active request "branch-list" %} ">
-                <i class="nav-icon fas fa-warehouse  "></i>
-                <p>
-                  الافرع
-                  <i class="fas fa-angle-left right {% active request "branch-list" %}"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
+{#            <li#}
+{#              class="nav-item has-treeview {% active_menu request "branch-list" %}">">#}
+{#              <a href="#" class="nav-link {% active request "branch-list" %} ">#}
+{#                <i class="nav-icon fas fa-warehouse  "></i>#}
+{#                <p>#}
+{#                  الافرع#}
+{#                  <i class="fas fa-angle-left right {% active request "branch-list" %}"></i>#}
+{#                </p>#}
+{#              </a>#}
+{#              <ul class="nav nav-treeview">#}
+{##}
+{#                <li class="nav-item">#}
+{#                  <a href="{% url 'branch-list' %}" class="nav-link {% active request "branch-list" %} " >#}
+{#                    <i class="far fa-calendar-alt nav-icon"></i>#}
+{#                    <p>#}
+{#                      جميع الافرع#}
+{#                    </p>#}
+{#                  </a>#}
+{#                </li>#}
+{##}
+{#              </ul>#}
+{##}
+{#            </li>#}
 
-                <li class="nav-item">
-                  <a href="{% url 'branch-list' %}" class="nav-link {% active request "branch-list" %} " >
-                    <i class="far fa-calendar-alt nav-icon"></i>
-                    <p>
-                      جميع الافرع
-                    </p>
-                  </a>
-                </li>
-
-              </ul>
-
-            </li>
             <li class="nav-item has-treeview ">
               <a href="#" class="nav-link  ">
                 <i class="nav-icon fas fa-star"></i>
@@ -327,105 +328,106 @@
               </ul>
             </li>
 
-            {% if request.user.is_superuser %}
-
-              <li class="nav-item has-treeview">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-birthday-cake"></i>
-                  <p>
-                    Birthday
-                    <i class="fas fa-angle-left right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
+{#            {% if request.user.is_superuser %}#}
+{##}
+{#              <li class="nav-item has-treeview">#}
+{#                <a href="#" class="nav-link">#}
+{#                  <i class="nav-icon fas fa-birthday-cake"></i>#}
+{#                  <p>#}
+{#                    Birthday#}
+{#                    <i class="fas fa-angle-left right"></i>#}
+{#                  </p>#}
+{#                </a>#}
+{#                <ul class="nav nav-treeview">#}
                   {#                <li class="nav-item">#}
                   {#                  <a href="pages/tables/simple.html" class="nav-link">#}
                   {#                    <i class="fas fa-gifts nav-icon"></i>#}
                   {#                    <p>Register birthday</p>#}
                   {#                  </a>#}
                   {#                </li>#}
+{##}
+{#                  <li class="nav-item">#}
+{#                    <a href="" class="nav-link">#}
+{#                      <i class="fas fa-child nav-icon"></i>#}
+{#                      <p>List Birthday</p>#}
+{#                    </a>#}
+{#                  </li>#}
+{##}
+{##}
+{#                </ul>#}
+{#              </li>#}
+{#            {% endif %}#}
 
-                  <li class="nav-item">
-                    <a href="" class="nav-link">
-                      <i class="fas fa-child nav-icon"></i>
-                      <p>List Birthday</p>
-                    </a>
-                  </li>
-
-
-                </ul>
-              </li>
-            {% endif %}
-
-            <li class="nav-item has-treeview {% active_menu request "school_list school_register school_visit_list" %}">
-              <a href="#" class="nav-link  {% active request "school_list school_register school_visit_list" %}">
-                <i class="nav-icon fas fa-school"></i>
-                <p>
-                  Schools
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-
-              <ul class="nav nav-treeview">
-
-                {% if request.user.is_superuser %}
-
-                  <li class="nav-item">
-                    <a href="" class="nav-link">
-                      <i class="fas fa-search nav-icon"></i>
-                      <p>All Schools</p>
-                    </a>
-                  </li>
-                {% endif %}
-
-                <li class="nav-item">
-                  <a href="" class="nav-link">
-                    <i class="far fa-plus-square nav-icon"></i>
-                    <p>Register School</p>
-                  </a>
-                </li>
-
-                {% if request.user.is_superuser %}
-
-                  <li class="nav-item">
-                    <a href="" class="nav-link">
-                      <i class="fas fa-user-graduate nav-icon"></i>
-                      <p>Active School Visit</p>
-                    </a>
-                  </li>
-                {% endif %}
-
-              </ul>
-            </li>
+{#            <li class="nav-item has-treeview {% active_menu request "school_list school_register school_visit_list" %}">#}
+{#              <a href="#" class="nav-link  {% active request "school_list school_register school_visit_list" %}">#}
+{#                <i class="nav-icon fas fa-school"></i>#}
+{#                <p>#}
+{#                  Schools#}
+{#                  <i class="fas fa-angle-left right"></i>#}
+{#                </p>#}
+{#              </a>#}
+{##}
+{#              <ul class="nav nav-treeview">#}
+{##}
+{#                {% if request.user.is_superuser %}#}
+{##}
+{#                  <li class="nav-item">#}
+{#                    <a href="" class="nav-link">#}
+{#                      <i class="fas fa-search nav-icon"></i>#}
+{#                      <p>All Schools</p>#}
+{#                    </a>#}
+{#                  </li>#}
+{#                {% endif %}#}
+{##}
+{#                <li class="nav-item">#}
+{#                  <a href="" class="nav-link">#}
+{#                    <i class="far fa-plus-square nav-icon"></i>#}
+{#                    <p>Register School</p>#}
+{#                  </a>#}
+{#                </li>#}
+{##}
+{#                {% if request.user.is_superuser %}#}
+{##}
+{#                  <li class="nav-item">#}
+{#                    <a href="" class="nav-link">#}
+{#                      <i class="fas fa-user-graduate nav-icon"></i>#}
+{#                      <p>Active School Visit</p>#}
+{#                    </a>#}
+{#                  </li>#}
+{#                {% endif %}#}
+{##}
+{#              </ul>#}
+{#            </li>#}
 
             {% if request.user.is_superuser %}
 
-              <li class="nav-header">Admin</li>
+              <li class="nav-header"></li>
 
               <li
-                class="nav-item has-treeview ">
+                class="nav-item has-treeview {% active_menu request "material-list material-create material-update" %}">
                 <a href="#"
-                   class="nav-link">
+                   class="nav-link {% active request "material-list material-create material-update" %}">
                   <i class="fas fa-cogs"></i>
                   <p>
-                    Settings
+                    المدير
                     <i class="right fas fa-angle-left"></i>
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
 
+
                   <li class="nav-item ">
-                    <a href="" class=" nav-link">
+                    <a href="{% url 'material-list' %}" class=" nav-link {% active request "material-list material-create material-update" %}">
                       <i class="fas fa-bars nav-icon"></i>
-                      <p>General</p>
+                      <p>المواد</p>
                     </a>
                   </li>
 
                   <li class="nav-item">
                     <a href=""
                        class="{% active request "plan_create plan_edit plan_list" %} nav-link">
-                      <i class="fas fa-solar-panel nav-icon"></i>
-                      <p>Plans</p>
+                     <i class="fas fa-users nav-icon"></i>
+                      <p>الموظفون</p>
                     </a>
                   </li>
 
@@ -439,68 +441,6 @@
                 </ul>
               </li>
 
-              <li
-                class="nav-item has-treeview">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-trash"></i>
-                  <p>
-                    Deleted
-                    <i class="fas fa-angle-left right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-
-                  <li class="nav-item">
-                    <a href="" class="nav-link ">
-                      <i class="far fa-calendar-times nav-icon"></i>
-                      <p>
-                        Visit
-                      </p>
-                    </a>
-                  </li>
-
-
-                  <li class="nav-item">
-                    <a href="" class="nav-link">
-                      <i class="far fa-calendar-times nav-icon"></i>
-                      <p>
-                        Event
-                      </p>
-                    </a>
-                  </li>
-
-                  <li class="nav-item">
-                    <a href=""
-                       class="nav-link">
-                      <i class="far fa-calendar-times nav-icon"></i>
-                      <p>
-                        Event Visit
-                      </p>
-                    </a>
-                  </li>
-
-                  <li class="nav-item">
-                    <a href=""
-                       class="nav-link ">
-                      <i class="far fa-calendar-times nav-icon"></i>
-                      <p>
-                        Birthday
-                      </p>
-                    </a>
-                  </li>
-
-                  <li class="nav-item">
-                    <a href=""
-                       class="nav-link">
-                      <i class="far fa-calendar-times nav-icon"></i>
-                      <p>
-                        School Visit
-                      </p>
-                    </a>
-                  </li>
-
-                </ul>
-              </li>
 
             {% endif %}
 

@@ -7,7 +7,9 @@
 
 {% block title %} تعديل {{ object }} {% endblock title %}
 {% block content_header %} تعديل {{ object }} {% endblock %}
-{% block content_right_active %} تعديل {{ object }} {% endblock %}
+{% block content_right_active %}
+    <a href="{% url 'company-detail' object.company.uid %}">العودة للشركة</a>
+ {% endblock %}
 
 {% block content %}
 
@@ -15,7 +17,7 @@
     <div class="card-body">
       <form method="post">{% csrf_token %}
         {{ form | crispy }}
-        <input type="submit" value="اضافة">
+        <input type="submit" value="حفظ">
       </form>
     </div>
   </div>

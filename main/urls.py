@@ -4,7 +4,7 @@ from .views import BranchListView, BranchCreateView, BranchUpdateView
 from .views import MaterialListView, MaterialCreateView, MaterialUpdateView
 from .views import InvoiceCreateView, InvoiceDetailView, InvoiceUpdateView
 from .views import InvoiceListView, BranchInvoiceListView, CompanyInvoiceListView
-from .views import InvoicePdf, InvoiceHtml
+from .views import InvoicePdfView, InvoicePdfWithoutPirceًView, InvoiceHtml
 
 urlpatterns = [
     path("", home, name="home"),
@@ -29,7 +29,8 @@ urlpatterns = [
     path("branch/<uuid:uid>/invoices", BranchInvoiceListView.as_view(), name="branch-invoice-list"),
     path("company/<uuid:uid>/invoices", CompanyInvoiceListView.as_view(), name="company-invoice-list"),
 
-    path("branch/invoice/<uuid:uid>/print", InvoicePdf.as_view(), name="invoice-print"),
+    path("branch/invoice/<uuid:uid>/print_no_price", InvoicePdfWithoutPirceًView.as_view(), name="invoice-print-without"),
+    path("branch/invoice/<uuid:uid>/print", InvoicePdfView.as_view(), name="invoice-print"),
     path("branch/invoice/<uuid:uid>/preview", InvoiceHtml.as_view(), name="invoice-preview"),
 
 ]

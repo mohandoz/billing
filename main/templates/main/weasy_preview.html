@@ -90,12 +90,14 @@
 
 
   <div class="row rtl" dir="rtl">
-    <p>{{ invoice.branch.company }} اسم الشركة</p>
+    <p>اسم الشركة:
+      {{ invoice.branch.company }} </p>
   </div>
 
 
   <div class="row rtl" dir="rtl">
-    <p>{{ invoice.branch }} الفرع</p>
+    <p>الفرع:
+      {{ invoice.branch }} </p>
   </div>
 
 
@@ -134,25 +136,31 @@
         {% endfor %}
         </tbody>
         <tfoot>
-        <tr>
-          <td colspan="3"></td>
-          <th>{{ invoice.sub_total }}</th>
-          <td class="number">المجموع</td>
-        </tr>
-        <tr>
-          <td colspan="3"></td>
-          <th>{{ invoice.tax }} 0</th>
-          <td class="number">الضريبة</td>
-        </tr>
-        <tr>
-          <td colspan="3"></td>
-          <th>{{ grand_total }} </th>
-          <td class="number">المجموع النهائي</td>
-        </tr>
+{#        <tr>#}
+{#          <td colspan="3"></td>#}
+{#          <th>{{ invoice.sub_total }}</th>#}
+{#          <td class="number">المجموع</td>#}
+{#        </tr>#}
+{#        <tr>#}
+{#          <td colspan="3"></td>#}
+{#          <th>{{ invoice.tax }} 0</th>#}
+{#          <td class="number">الضريبة</td>#}
+{#        </tr>#}
         </tfoot>
       </table>
     </div>
   </div>
+
+  <table id="total">
+    <thead>
+    <th>المجموع النهائي</th>
+    </thead>
+    <tbody>
+    <tr>
+      <td>{{ grand_total }}</td>
+    </tr>
+    </tbody>
+  </table>
 </div>
 </body>
 

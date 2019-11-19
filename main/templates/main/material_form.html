@@ -7,7 +7,9 @@
 
 {% block title %} اضافة مادة {% endblock title %}
 {% block content_header %} اضافة مادة {% endblock %}
-{% block content_right_active %}  اضافة مادة  {% endblock %}
+{% block content_right_active %}
+  <a href="{% url 'material-list'  %}">العودة لشاشة المواد</a>
+  {% endblock %}
 
 {% block content %}
 

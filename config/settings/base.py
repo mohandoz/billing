@@ -270,3 +270,5 @@ SOCIALACCOUNT_ADAPTER = "billing.users.adapters.SocialAccountAdapter"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+PDF_ROOT = ROOT_DIR("pdf")
+BACKUP_ROOT = ROOT_DIR("backup")

@@ -4,7 +4,7 @@
 {% block title %}  {{ invoice.branch.company }} {% endblock title %}
 {% block content_header %}  {{ invoice.branch.company }} {% endblock %}
 {% block content_right_active %}
-  <a href="{% url 'branch-invoice-list' invoice.branch.uid %}">{{ invoice.branch }}</a> {% endblock %}
+  <a href="{% url 'branch-invoice-list' invoice.branch.uid %}">العودة للفرع</a> {% endblock %}
 
 
 {% block content %}
@@ -26,13 +26,18 @@
                       onclick="printJS('{% url 'invoice-print' object.uid %}')">طباعة
               </button>
 
+              <button class="btn btn-outline-secondary command" type="button"
+                      onclick="printJS('{% url 'invoice-print-without' object.uid %}')">طباعة بدون سعر
+              </button>
+
+
               {% if request.user.is_superuser %}
                 <a class="btn btn-outline-secondary command" href="{% url 'invoice-update' object.uid %}">تعديل</a>
               {% endif %}
 
               <br> <br>
               <h4>
-              الحالة:
+                الحالة:
                 <td>{% if invoice.status == 1 %}
                   <span class="badge badge-success">فعال</span>
                 {% else %}
@@ -52,6 +57,11 @@
             <button class="btn btn-outline-secondary command" type="button"
                     onclick="printJS('{% url 'invoice-print' object.uid %}')">طباعة
             </button>
+
+            <button class="btn btn-outline-secondary command" type="button"
+                    onclick="printJS('{% url 'invoice-print-without' object.uid %}')">طباعة بدون سعر
+            </button>
+
             {% if request.user.is_superuser %}
               <a class="btn btn-outline-secondary command" href="{% url 'invoice-update' object.uid %}">تعديل</a>
             {% endif %}

@@ -110,7 +110,7 @@ html table td {
 }
 
 html table td:last-of-type {
-  color: #1ee494;
+  color: black;
   font-weight: bold;
   text-align: right;
 }

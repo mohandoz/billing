@@ -2,49 +2,40 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <link href="invoice.css" media="print" rel="stylesheet">
+  {#  <link href="invoice.css" media="print" rel="stylesheet">#}
   <title>Invoice</title>
   <meta name="description" content="Invoice demo sample">
   <meta name="author" content="Kozea">
 
-  <link rel="author" title="Eira Monstad, Opera Software ASA" href="mailto:public-testsuites@opera.com">
-  <link rel="help" href="http://www.w3.org/TR/CSS21/tables.html#table-layout">
-  <link rel="help" href="http://www.w3.org/TR/CSS21/visuren.html#direction">
+  {#  <link rel="help" href="http://www.w3.org/TR/CSS21/tables.html#table-layout">#}
+  {#  <link rel="help" href="http://www.w3.org/TR/CSS21/visuren.html#direction">#}
 </head>
 
 <body>
-<h1>Invoice</h1>
-
-{#<aside>#}
-{#  <address id="from">#}
-{#    Weasyprint [ by Kozea ]#}
-{#    107 boulevard de Stalingrad#}
-{#    69100 Villeurbanne City#}
-{#    France#}
-{#  </address>#}
-{##}
-{#  <address id="to">#}
-{#    Our awesome developers#}
-{#    From all around the world#}
-{#    Earth#}
-{#  </address>#}
-{#</aside>#}
-
-<dl id="informations">
-  <dt>{{ invoice.invoice_number }}</dt>
-  <dd>رقم الفاتورة:</dd>
-  <dt>{{ invoice.created | date:"Y/m/d" }}</dt>
-  <dd>التاريخ:</dd>
-</dl>
-
-<div class="row rtl" dir="rtl">
-       <p>{{ invoice.branch.company }}  اسم الشركة</p>
-</div>
+<h3>عرض سعر</h3>
 
 
-<div class="row rtl" dir="rtl">
-     <p>{{ invoice.branch }}  الفرع</p>
-</div>
+<table class="my-table">
+  <tr>
+    <td> التاريخ:
+      {{ invoice.created | date:"Y/m/d" }}</td>
+
+
+    <td>رقم الفاتورة:
+      {{ invoice.invoice_number }}</td>
+  </tr>
+</table>
+
+
+<table class="my-table">
+  <tr>
+    <td> الفرع:
+      {{ invoice.branch }}</td>
+
+    <td>اسم الشركة:
+      {{ invoice.branch.company }}</td>
+  </tr>
+</table>
 
 
 
@@ -56,12 +47,12 @@
         <th></th>
 
 
-        <th>رقم الاخراج</th>
         <th>تاريخ الاستلام</th>
-        <th>اجمالي</th>
+        <th>رقم الاخراج</th>
         <th>السعر</th>
         <th>الكمية</th>
         <th>المادة</th>
+        <th>اجمالي</th>
 
 
       </tr>
@@ -72,78 +63,49 @@
         <tr>
           <td class="rownum"></td>
 
-          <td class="number">{{ detail.output_number }} </td>
+
           <td class="number">{{ detail.delivery_date | date:"Y/m/d" }} </td>
-          <td class="number">{{ detail.total }} </td>
-          <td class="number">{{ detail.price }} </td>
+          <td class="number">{{ detail.output_number }} </td>
+          <td class="number">{{ detail.price.normalize }} </td>
           <td class="number">{{ detail.quantity }}</td>
           <td>{{ detail.material }}</td>
+          <td class="number">{{ detail.total.normalize }} </td>
 
         </tr>
       {% endfor %}
       </tbody>
       <tfoot>
       <tr>
-        <td colspan="3"></td>
-        <th>{{ invoice.sub_total }}</th>
-        <td class="number">المجموع</td>
       </tr>
       <tr>
-        <td colspan="3"></td>
-        <th>{{ invoice.tax }} 0</th>
-        <td class="number">الضريبة</td>
+        <br>
       </tr>
-      <tr>
-        <td colspan="3"></td>
-        <th>{{ grand_total }} </th>
-        <td class="number">المجموع النهائي</td>
-      </tr>
+      {#      <tr class="top-line">#}
+      {#        <td colspan="3"></td>#}
+      {##}
+      {#        <td class="number">{{ grand_total }} </td>#}
+      {#        <td>المجموع</td>#}
+      {#      </tr>#}
       </tfoot>
     </table>
   </div>
+
+  <div class="row">
+    <div class="col-12">
+      <table id="total">
+        <thead>
+        <th>المجموع النهائي</th>
+        </thead>
+        <tbody>
+        <tr>
+          <td>{{ grand_total.normalize }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-{#    <table>#}
-{#      <thead>#}
-{#        <th>Description</th>#}
-{#        <th>Price</th>#}
-{#        <th>Quantity</th>#}
-{#        <th>Subtotal</th>#}
-{#      </thead>#}
-{#      <tbody>#}
-{#        <tr>#}
-{#          <td>Website design</td>#}
-{#          <td>€34.20</td>#}
-{#          <td>100</td>#}
-{#          <td>€3,420.00</td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#          <td>Website development</td>#}
-{#          <td>€45.50</td>#}
-{#          <td>100</td>#}
-{#          <td>€4,550.00</td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#          <td>Website integration</td>#}
-{#          <td>€25.75</td>#}
-{#          <td>100</td>#}
-{#          <td>€2,575.00</td>#}
-{#        </tr>#}
-{#      </tbody>#}
-{#    </table>#}
-{##}
-{#    <table id="total">#}
-{#      <thead>#}
-{#        <th>Due by</th>#}
-{#        <th>Account number</th>#}
-{#        <th>Total due</th>#}
-{#      </thead>#}
-{#      <tbody>#}
-{#        <tr>#}
-{#          <td>May 10, 2018</td>#}
-{#          <td>132 456 789 012</td>#}
-{#          <td>€10,545.00</td>#}
-{#        </tr>#}
-{#      </tbody>#}
-{#    </table>#}
+
+
 </body>
 </html>
