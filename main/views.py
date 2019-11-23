@@ -15,6 +15,11 @@ from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .mixins import InvoiceMixin, FormsetMixin
 from django.views import View
+from django.contrib.auth import get_user_model
+USER_MODEL = get_user_model()
+
+from billing.users.forms import UserCreationForm
+
 
 
 # print
@@ -411,5 +416,22 @@ class InvoiceHtml(View):
 
 
 
+class UsersListView(LoginRequiredMixin, generic.ListView):
+    template_name = "main/users_list_app.html"
+    model = USER_MODEL
+    fields = ["username", "is_active", "is_staff"]
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.exclude(username="admin")
 
+class UserCreateView(LoginRequiredMixin, generic.CreateView):
+    template_name = "main/user_create_app.html"
+    form_class = UserCreationForm
+    model = USER_MODEL
+    # fields = ["username", "password"]
+
+class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
+    template_name = "main/user_update_app.html"
+    model = USER_MODEL
+    fields = ["is_active", ]

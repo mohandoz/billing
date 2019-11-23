@@ -5,6 +5,7 @@ from .views import MaterialListView, MaterialCreateView, MaterialUpdateView
 from .views import InvoiceCreateView, InvoiceDetailView, InvoiceUpdateView
 from .views import InvoiceListView, BranchInvoiceListView, CompanyInvoiceListView
 from .views import InvoicePdfView, InvoicePdfWithoutPirceًView, InvoiceHtml
+from .views import UsersListView, UserCreateView,  UserUpdateView
 
 urlpatterns = [
     path("", home, name="home"),
@@ -32,5 +33,9 @@ urlpatterns = [
     path("branch/invoice/<uuid:uid>/print_no_price", InvoicePdfWithoutPirceًView.as_view(), name="invoice-print-without"),
     path("branch/invoice/<uuid:uid>/print", InvoicePdfView.as_view(), name="invoice-print"),
     path("branch/invoice/<uuid:uid>/preview", InvoiceHtml.as_view(), name="invoice-preview"),
+
+    path("users_list", UsersListView.as_view(), name="users-list"),
+    path("users_create", UserCreateView.as_view(), name="user-create"),
+    path("users_list/<int:pk>/update", UserUpdateView.as_view(), name="user-update"),
 
 ]

@@ -13,7 +13,7 @@
 {% block content %}
 
 
-    <div class="card">
+  <div class="card">
     <div class="card-body">
       <input type="button" value="   فاتورة جديدة " class="fas fa-plus-square btn btn-success my-modal-wrapper"
              onclick="location='{% url 'invoice-create' branch.uid %}'">
@@ -40,8 +40,9 @@
         <tr>
           <th>رقم الفاتورة</th>
           <th>الحالة</th>
-          <th>تعديل</th>
-          <th>pdf</th>
+          {% if request.user.is_superuser %}
+            <th>تعديل</th>
+          {% endif %}
           <th>عداد الطباعة</th>
           <th>المستخدم</th>
 
@@ -64,22 +65,21 @@
             {% endif %}
             </td>
 
-            <td>
+            {% if request.user.is_superuser %}
 
-              <input type="button" value="" class="fas fa-cog btn btn-default my-modal-wrapper"
-                     onclick="location='{% url 'material-update' object.uid %}'">
-            </td>
+              <td>
+                <input type="button" value="" class="fas fa-cog btn btn-default my-modal-wrapper"
+                       onclick="location='{% url 'invoice-update' object.uid %}'">
+              </td>
 
-            <td>
-              {{ object.print_count }} idk
-            </td>
+            {% endif %}
 
             <td>
               {{ object.print_count }}
             </td>
 
             <td>
-             {{ object.created_by }}
+              {{ object.created_by }}
             </td>
 
           </tr>
@@ -98,7 +98,7 @@
       </table>
 
     </div>
-      <div class="pagination align-self-center">
+    <div class="pagination align-self-center">
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           {% if page_obj.has_previous %}

@@ -30,13 +30,15 @@
         <thead class="thead-dark">
         <tr>
           <th>رقم الفاتورة</th>
-          <th>الحالة</th>
 
 
-          <th>معاينة الفاتورة</th>
+{#          <th>معاينة الفاتورة</th>#}
           <th>طباعة</th>
           <th>عداد الطباعة</th>
+
           <th>المستخدم</th>
+          <th>الحالة</th>
+
           {% if request.user.is_superuser %}
             <th>تعديل</th>
           {% endif %}
@@ -53,19 +55,11 @@
             </td>
 
 
-            <td>
-              {% if object.status == 1 %}
-                <span class="badge badge-success">فعال</span>
-              {% else %}
-                <span class="badge badge-danger">غير فعال</span>
-              {% endif %}
-            </td>
+{#            <th>#}
+{#              <input type="button" value="" class="fas fa-cog btn btn-default my-modal-wrapper"#}
+{#                       onclick=" window.open('{% url 'invoice-preview' object.uid %}', '_blank'); return false;">#}
+{#            </th>#}
 
-
-            <th><input type="button" value="" class="fas fa-cog btn btn-default my-modal-wrapper"
-                       onclick=" window.open('{% url 'invoice-preview' object.uid %}', '_blank'); return false;">
-
-            </th>
             <th>
               <input type="button" value="" class="fas fa-print btn btn-default my-modal-wrapper"
                      onclick="printJS('{% url 'invoice-print' object.uid %}')">
@@ -73,6 +67,15 @@
             </th>
             <th>{{ object.print_count }}</th>
             <th>{{ object.created_by }}</th>
+
+            <td>
+              {% if object.status == 1 %}
+                <span class="badge badge-success">فعال</span>
+              {% else %}
+                <span class="badge badge-danger">غير فعال</span>
+              {% endif %}
+            </td>
+            </td>
 
             {% if request.user.is_superuser %}
               <td>

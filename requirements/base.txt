@@ -18,3 +18,5 @@ djangorestframework==3.9.4  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client
 django-filter
 django_widget_tweaks
+django-dbbackup
+

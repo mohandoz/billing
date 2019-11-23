@@ -76,7 +76,8 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "widget_tweaks",
     'extra_views',
-    'bootstrap4'
+    'bootstrap4',
+    'dbbackup',
 ]
 
 LOCAL_APPS = [
@@ -272,3 +273,7 @@ SOCIALACCOUNT_ADAPTER = "billing.users.adapters.SocialAccountAdapter"
 # ------------------------------------------------------------------------------
 PDF_ROOT = ROOT_DIR("pdf")
 BACKUP_ROOT = ROOT_DIR("backup")
+DB_BACKUP_ROOT = ROOT_DIR("db_backup")
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': DB_BACKUP_ROOT }

@@ -27,8 +27,11 @@
     <!-- Your stuff: Third-party CSS libraries go here -->
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+{#    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"#}
+{#          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">#}
+        <link rel="stylesheet" href="{% static 'css/fontawesome/css/all.css' %}">
+
+
 
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -78,17 +81,17 @@
         <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
       </li>
       {% if request.user.is_authenticated %}
-        <li class="nav-item d-none d-sm-inline-block">
-          <a href="" class="nav-link ">Home</a>
-        </li>
+{#        <li class="nav-item d-none d-sm-inline-block">#}
+{#          <a href="" class="nav-link ">Home</a>#}
+{#        </li>#}
       {% else %}
         <a href="{% url 'home' %}" class="nav-link">الرئيسية</a>
 
       {% endif %}
 
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
-      </li>
+{#      <li class="nav-item d-none d-sm-inline-block">#}
+{#        <a href="#" class="nav-link">Contact</a>#}
+{#      </li>#}
 
       {% if request.user.is_authenticated %}
         <li class="nav-item">
@@ -99,10 +102,6 @@
       {% else %}
 
         <li class="nav-item">
-          {# URL provided by django-allauth/account/urls.py #}
-          <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
-        </li>
-        <li class="nav-item">
         {# URL provided by django-allauth/account/urls.py #}
         <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
 
@@ -112,112 +111,112 @@
 
 
     <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
-      <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-        <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
-    </form>
+{#    <form class="form-inline ml-3">#}
+{#      <div class="input-group input-group-sm">#}
+{#        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">#}
+{#        <div class="input-group-append">#}
+{#          <button class="btn btn-navbar" type="submit">#}
+{#            <i class="fas fa-search"></i>#}
+{#          </button>#}
+{#        </div>#}
+{#      </div>#}
+{#    </form>#}
 
     <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-      <!-- Messages Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="fas fa-comments-o"></i>
-          <span class="badge badge-danger navbar-badge">3</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="{% static 'images/favicons/favicon.ico' %}" alt="User Avatar"
-                   class="img-size-50 mr-3 img-circle">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Brad Diesel
-                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">Call me whenever you can...</p>
-                <p class="text-sm text-muted"><i class="fas fa-clock-o mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="{% static 'images/favicons/favicon.ico' %}" alt="User Avatar"
-                   class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  John Pierce
-                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">I got your message bro</p>
-                <p class="text-sm text-muted"><i class="fas fa-clock-o mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="{% static 'images/favicons/favicon.ico' %}" alt="User Avatar"
-                   class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Nora Silvester
-                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">The subject goes here</p>
-                <p class="text-sm text-muted"><i class="fas fa-clock-o mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-        </div>
-      </li>
-      <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="fas fa-bell-o"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i
-          class="fas fa-th-large"></i></a>
-      </li>
-    </ul>
+{#    <ul class="navbar-nav ml-auto">#}
+{#      <!-- Messages Dropdown Menu -->#}
+{#      <li class="nav-item dropdown">#}
+{#        <a class="nav-link" data-toggle="dropdown" href="#">#}
+{#          <i class="fas fa-comments-o"></i>#}
+{#          <span class="badge badge-danger navbar-badge">3</span>#}
+{#        </a>#}
+{#        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">#}
+{#          <a href="#" class="dropdown-item">#}
+{#            <!-- Message Start -->#}
+{#            <div class="media">#}
+{#              <img src="{% static 'images/favicons/favicon.ico' %}" alt="User Avatar"#}
+{#                   class="img-size-50 mr-3 img-circle">#}
+{#              <div class="media-body">#}
+{#                <h3 class="dropdown-item-title">#}
+{#                  Brad Diesel#}
+{#                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>#}
+{#                </h3>#}
+{#                <p class="text-sm">Call me whenever you can...</p>#}
+{#                <p class="text-sm text-muted"><i class="fas fa-clock-o mr-1"></i> 4 Hours Ago</p>#}
+{#              </div>#}
+{#            </div>#}
+{#            <!-- Message End -->#}
+{#          </a>#}
+{#          <div class="dropdown-divider"></div>#}
+{#          <a href="#" class="dropdown-item">#}
+{#            <!-- Message Start -->#}
+{#            <div class="media">#}
+{#              <img src="{% static 'images/favicons/favicon.ico' %}" alt="User Avatar"#}
+{#                   class="img-size-50 img-circle mr-3">#}
+{#              <div class="media-body">#}
+{#                <h3 class="dropdown-item-title">#}
+{#                  John Pierce#}
+{#                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>#}
+{#                </h3>#}
+{#                <p class="text-sm">I got your message bro</p>#}
+{#                <p class="text-sm text-muted"><i class="fas fa-clock-o mr-1"></i> 4 Hours Ago</p>#}
+{#              </div>#}
+{#            </div>#}
+{#            <!-- Message End -->#}
+{#          </a>#}
+{#          <div class="dropdown-divider"></div>#}
+{#          <a href="#" class="dropdown-item">#}
+{#            <!-- Message Start -->#}
+{#            <div class="media">#}
+{#              <img src="{% static 'images/favicons/favicon.ico' %}" alt="User Avatar"#}
+{#                   class="img-size-50 img-circle mr-3">#}
+{#              <div class="media-body">#}
+{#                <h3 class="dropdown-item-title">#}
+{#                  Nora Silvester#}
+{#                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>#}
+{#                </h3>#}
+{#                <p class="text-sm">The subject goes here</p>#}
+{#                <p class="text-sm text-muted"><i class="fas fa-clock-o mr-1"></i> 4 Hours Ago</p>#}
+{#              </div>#}
+{#            </div>#}
+{#            <!-- Message End -->#}
+{#          </a>#}
+{#          <div class="dropdown-divider"></div>#}
+{#          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>#}
+{#        </div>#}
+{#      </li>#}
+{#      <!-- Notifications Dropdown Menu -->#}
+{#      <li class="nav-item dropdown">#}
+{#        <a class="nav-link" data-toggle="dropdown" href="#">#}
+{#          <i class="fas fa-bell-o"></i>#}
+{#          <span class="badge badge-warning navbar-badge">15</span>#}
+{#        </a>#}
+{#        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">#}
+{#          <span class="dropdown-item dropdown-header">15 Notifications</span>#}
+{#          <div class="dropdown-divider"></div>#}
+{#          <a href="#" class="dropdown-item">#}
+{#            <i class="fas fa-envelope mr-2"></i> 4 new messages#}
+{#            <span class="float-right text-muted text-sm">3 mins</span>#}
+{#          </a>#}
+{#          <div class="dropdown-divider"></div>#}
+{#          <a href="#" class="dropdown-item">#}
+{#            <i class="fas fa-users mr-2"></i> 8 friend requests#}
+{#            <span class="float-right text-muted text-sm">12 hours</span>#}
+{#          </a>#}
+{#          <div class="dropdown-divider"></div>#}
+{#          <a href="#" class="dropdown-item">#}
+{#            <i class="fas fa-file mr-2"></i> 3 new reports#}
+{#            <span class="float-right text-muted text-sm">2 days</span>#}
+{#          </a>#}
+{#          <div class="dropdown-divider"></div>#}
+{#          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>#}
+{#        </div>#}
+{#      </li>#}
+{#      <li class="nav-item">#}
+{#        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i#}
+{#          class="fas fa-th-large"></i></a>#}
+{#      </li>#}
+{#    </ul>#}
   </nav>
   <!-- /.navbar -->
 
@@ -230,7 +229,7 @@
         <img src="{% static 'images/favicons/favicon.ico' %}" alt="AdminLTE Logo"
              class="brand-image img-circle elevation-3"
              style="opacity: .8">
-        <span class="brand-text font-weight-light">WoW</span>
+        <span class="brand-text font-weight-light">Billing</span>
       </a>
 
       <!-- Sidebar -->
@@ -239,11 +238,10 @@
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
             {#          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">#}
-            <img src="{% static 'images/favicons/favicon.ico' %}" class="img-circle elevation-2" alt="User Image">
 
           </div>
           <div class="info">
-            <a href="{% url 'users:detail' request.user.username %}"
+            <a
                class="fas fa-user d-block"> {{ request.user.username }}</a>
           </div>
         </div>
@@ -306,19 +304,19 @@
 {##}
 {#            </li>#}
 
-            <li class="nav-item has-treeview ">
-              <a href="#" class="nav-link  ">
+            <li class="nav-item has-treeview {% active_menu request "invoice-list" %}">
+              <a href="#" class="nav-link  {% active request "invoice-list" %}">
                 <i class="nav-icon fas fa-star"></i>
                 <p>
                   الفواتير
                   <i class="fas fa-angle-left right"></i>
                 </p>
               </a>
-              <ul class="nav nav-treeview">
+              <ul class="nav nav-treeview  ">
 
 
                 <li class="nav-item">
-                  <a href="{% url 'invoice-list' %}" class="nav-link">
+                  <a href="{% url 'invoice-list' %}" class="nav-link {% active request "invoice-list" %}">
                     <i class="fas fa-list nav-icon"></i>
                     <p>جميع الفواتير </p>
                   </a>
@@ -424,20 +422,20 @@
                   </li>
 
                   <li class="nav-item">
-                    <a href=""
-                       class="{% active request "plan_create plan_edit plan_list" %} nav-link">
+                    <a href="{% url 'users-list' %}"
+                       class="{% active request "users-list" %} nav-link">
                      <i class="fas fa-users nav-icon"></i>
                       <p>الموظفون</p>
                     </a>
                   </li>
 
-                  <li class="nav-item">
-                    <a href=""
-                       class="nav-link">
-                      <i class="fas fa-money-bill-wave nav-icon"></i>
-                      <p>Extra</p>
-                    </a>
-                  </li>
+{#                  <li class="nav-item">#}
+{#                    <a href=""#}
+{#                       class="nav-link">#}
+{#                      <i class="fas fa-money-bill-wave nav-icon"></i>#}
+{#                      <p>Extra</p>#}
+{#                    </a>#}
+{#                  </li>#}
                 </ul>
               </li>
 

@@ -85,7 +85,7 @@ class Branch(TimeStampedModel):
 
 class Material(TimeStampedModel):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    name = models.CharField(max_length=30,  verbose_name="اسم المادة")
+    name = models.CharField(max_length=70,  verbose_name="اسم المادة")
     status = models.PositiveIntegerField(choices=STATUS_CHOICE, default=ACTIVE, verbose_name="الحالة")
 
     def get_absolute_url(self):

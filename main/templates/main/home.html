@@ -49,12 +49,12 @@
             {#            </button>#}
           </div>
 
-          <div class="form-group col-sm-2 col-md-2">
-            <input type="button" class="btn btn-secondary fas fa-broom" id="reset" value=" Reset"/>
-          </div>
+{#          <div class="form-group col-sm-2 col-md-2">#}
+{#            <input type="button" class="btn btn-secondary fas fa-broom" id="reset" value=" Reset"/>#}
+{#          </div>#}
 
           <div class="form-group col-sm-2 col-md-2">
-            <input type="button" class="btn btn-primary float-left submit-button fas fa-users"
+            <input type="button" class="btn  btn-default float-left submit-button fas fa-users"
                    value=" اضافة شركة"
                    onclick="location='{% url "company-create" %}'">
           </div>
@@ -73,7 +73,7 @@
           <th scope="col">#</th>
           <th>اسم الشركة</th>
           <th>الحالة</th>
-          <th>Actions</th>
+          <th>الخيارات</th>
         </tr>
         </thead>
         <tbody>
@@ -119,13 +119,8 @@
                       <table class="table table-bordered  table-striped table-hover">
                         <thead class="thead-dark">
                         <tr>
-                          <th>تعديل</th>
                           <th>الافرع</th>
                           <th>جميع الفواتير</th>
-                          <th>Event</th>
-                          {% if request.user.is_superuser %}
-                            <th>Birthday</th>
-                          {% endif %}
                         </tr>
                         </thead>
                         <tbody>
@@ -137,27 +132,12 @@
                           </td>
 
                           <td>
-                            <input type="button" name="whatsapp" value="&#xf232"
-                                   class="fab fa-whatsapp btn btn-sm btn-success"
-                                   onclick=" window.open('{{ parent.whatsapp }}', '_blank'); return false;">
-                          </td>
-
-                          <td>
-                            <input type="button" name="visit" value="" class="fas fa-child btn btn-sm btn-warning"
+                            <input type="button" name="whatsapp" value=""
+                                   class="fas fa-file-invoice btn btn-sm btn-success"
                                    onclick="location='{% url 'company-invoice-list' company.uid %}'">
                           </td>
 
-                          <td>
-                            <input type="button" name="event" value="" class="fas fa-star btn btn-sm btn-info"
-                                   onclick="location='event_visit/{{ parent.uid }}'">
-                          </td>
-                          {% if request.user.is_superuser %}
-                            <td>
-                              <input type="button" name="birthday" value=""
-                                     class="fas fa-birthday-cake btn btn-sm btn-dark"
-                                     onclick="location='birthday_register/{{ parent.uid }}'">
-                            </td>
-                          {% endif %}
+
                         </tr>
 
                         </tbody>
