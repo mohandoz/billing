@@ -75,8 +75,6 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "django_filters",
     "widget_tweaks",
-    'extra_views',
-    'bootstrap4',
     'dbbackup',
 ]
 
