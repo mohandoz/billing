@@ -128,6 +128,8 @@ class Invoice(TimeStampedModel):
 
         super(Invoice, self).save(*args, **kwargs)
 
+    def get_invoice_details(self):
+        return self.invoice_details.all().order_by("material")
 
 
     def get_absolute_url(self):
@@ -154,7 +156,6 @@ class InvoiceDetail(TimeStampedModel):
         return f"{self.material.name} - {self.invoice.invoice_number}"
 
     def save(self, *args, **kwargs):
-        print(self.quantity , " ", self.price, " ",  self.quantity * self.price)
         self.total = self.quantity * self.price
         super(InvoiceDetail, self).save(*args, **kwargs)
 

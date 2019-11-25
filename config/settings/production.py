@@ -7,7 +7,9 @@ from .base import env
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 #ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["*"])
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "*"]
+
+
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -61,15 +63,17 @@ DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)  # no
 # TEMPLATES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#templates
-#TEMPLATES[0]["OPTIONS"]["loaders"] = [  # noqa F405
-#    (
-#        "django.template.loaders.cached.Loader",
-#        [
-#            "django.template.loaders.filesystem.Loader",
-#            "django.template.loaders.app_directories.Loader",
-#        ],
-#    )
-#]
+TEMPLATES[0]["OPTIONS"]["loaders"] = [  # noqa F405
+    (
+        "django.template.loaders.cached.Loader",
+        [
+            "django.template.loaders.filesystem.Loader",
+            "django.template.loaders.app_directories.Loader",
+        ],
+    )
+]
+
+
 
 # EMAIL
 # ------------------------------------------------------------------------------

@@ -219,8 +219,7 @@ class InvoiceCreateView(LoginRequiredMixin, InvoiceMixin, FormsetMixin, generic.
         context['company'] = company
         return context
 
-
-
+    
 
 class InvoiceDetailView(generic.DetailView):
     model = Invoice
@@ -350,9 +349,9 @@ class InvoicePdfView(View):
 
         html.write_pdf(response, stylesheets=[f"{settings.STATIC_ROOT}/css/weasy.css"])
 
+        increment_print = invoice.print_count + 1
+        Invoice.objects.filter(id=invoice.id).update(print_count= increment_print)
 
-        invoice.print_count += 1
-        invoice.save()
 
         return response
 
@@ -379,8 +378,9 @@ class InvoicePdfWithoutPirceًView(View):
 
         HTML(string=html).write_pdf(response, stylesheets=[f"{settings.STATIC_ROOT}/css/weasy.css"])
 
-        invoice.print_count += 1
-        invoice.save()
+        increment_print = invoice.print_count + 1
+        Invoice.objects.filter(id=invoice.id).update(print_count= increment_print)
+
         return response
 
 class InvoiceHtml(View):
