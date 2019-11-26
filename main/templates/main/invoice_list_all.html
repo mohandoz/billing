@@ -33,7 +33,7 @@
 
 
 {#          <th>معاينة الفاتورة</th>#}
-          <th>طباعة</th>
+          <!-- <th>طباعة</th> -->
           <th>عداد الطباعة</th>
 
           <th>المستخدم</th>
@@ -60,11 +60,11 @@
 {#                       onclick=" window.open('{% url 'invoice-preview' object.uid %}', '_blank'); return false;">#}
 {#            </th>#}
 
-            <th>
+            <!-- <th>
               <input type="button" value="" class="fas fa-print btn btn-default my-modal-wrapper"
                      onclick="printJS('{% url 'invoice-print' object.uid %}')">
 
-            </th>
+            </th> -->
             <th>{{ object.print_count }}</th>
             <th>{{ object.created_by }}</th>
 

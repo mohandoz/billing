@@ -1,0 +1,5 @@
+d:\billing\django_run.bat
+d:\billing
+D:\venv\Scripts\python.exe  d:\billing\manage.py runserver
+
+and add full db with password to settings

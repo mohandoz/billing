@@ -41,9 +41,11 @@ LOCALE_PATHS = [ROOT_DIR.path("locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
+# default="postgres:///billing"
+# default=postgres://billing:Amman123@127.0.0.1:5432/billing
 
 DATABASES = {
-    "default": env.db("DATABASE_URL", default="postgres:///billing")
+    "default": env.db("DATABASE_URL", default="postgres://billing:Amman123@127.0.0.1:5432/billing")
     # "default": env.db('SQLITE_URL', default='sqlite:/billing.db')
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True

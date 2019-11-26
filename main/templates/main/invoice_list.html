@@ -39,12 +39,14 @@
         <thead class="thead-dark">
         <tr>
           <th>رقم الفاتورة</th>
-          <th>الحالة</th>
-          {% if request.user.is_superuser %}
-            <th>تعديل</th>
-          {% endif %}
+ 
+   
           <th>عداد الطباعة</th>
           <th>المستخدم</th>
+          <th>الحالة</th>
+          {% if request.user.is_superuser %}
+          <th>تعديل</th>
+        {% endif %}
 
         </tr>
         </thead>
@@ -58,21 +60,9 @@
             </td>
 
 
-            <td>{% if object.status == 1 %}
-              <span class="badge badge-success">فعال</span>
-            {% else %}
-              <span class="badge badge-danger">غير فعال</span>
-            {% endif %}
-            </td>
+    
 
-            {% if request.user.is_superuser %}
 
-              <td>
-                <input type="button" value="" class="fas fa-cog btn btn-default my-modal-wrapper"
-                       onclick="location='{% url 'invoice-update' object.uid %}'">
-              </td>
-
-            {% endif %}
 
             <td>
               {{ object.print_count }}
@@ -81,6 +71,23 @@
             <td>
               {{ object.created_by }}
             </td>
+
+            <td>
+                {% if object.status == 1 %}
+                <span class="badge badge-success">فعال</span>
+              {% else %}
+                <span class="badge badge-danger">غير فعال</span>
+              {% endif %}
+              </td>
+
+            {% if request.user.is_superuser %}
+
+            <td>
+              <input type="button" value="" class="fas fa-cog btn btn-default my-modal-wrapper"
+                     onclick="location='{% url 'invoice-update' object.uid %}'">
+            </td>
+
+          {% endif %}
 
           </tr>
 

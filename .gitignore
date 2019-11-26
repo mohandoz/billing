@@ -14,9 +14,9 @@ __pycache__/
 scripts/
 
 # pdf and backup
-pdf/
-backup/
-db_backup/
+pdf/*
+backup/*
+db_backup/*
 
 # Distribution / packaging
 .Python
