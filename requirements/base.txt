@@ -20,4 +20,4 @@ django-filter
 django_widget_tweaks
 django-dbbackup
 weasyprint
-
+git+git://github.com/mohandoz/num2words.git

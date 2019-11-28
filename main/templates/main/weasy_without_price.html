@@ -21,7 +21,7 @@
       {{ invoice.created | date:"Y/m/d" }}</td>
 
 
-    <td>رقم الفاتورة:
+    <td>رقم :
       {{ invoice.invoice_number }}</td>
   </tr>
 </table>
@@ -32,11 +32,15 @@
     <td> الفرع:
       {{ invoice.branch }}</td>
 
-    <td>اسم الشركة:
-      {{ invoice.branch.company }}</td>
+    <td>
+      <b>
+        اسم الشركة:
+
+        {{ invoice.branch.company }}
+      </b>
+    </td>
   </tr>
 </table>
-
 
 
 <div class="row">
@@ -92,12 +96,25 @@
     <div class="col-12">
       <table id="total">
         <thead>
-        <th>المجموع النهائي</th>
+        <th>
+          <b>
+            المجموع النهائي
+          </b>
+        </th>
         </thead>
         <tbody>
         <tr>
-          <td>{{ grand_total.normalize }}</td>
+          <td>
+            <b>{{ grand_total.normalize }}
+              دينار</b>
+            <br>
+
+            {{ grand_total_words }}
+          </td>
+
+
         </tr>
+
         </tbody>
       </table>
     </div>

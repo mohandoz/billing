@@ -81,12 +81,10 @@
   <h1>Invoice</h1>
 
 
-
   <div class="row rtl" dir="rtl">
     <p>التاريخ:
       {{ invoice.created | date:"Y/m/d" }}</p>
   </div>
-
 
 
   <div class="row rtl" dir="rtl">
@@ -136,16 +134,16 @@
         {% endfor %}
         </tbody>
         <tfoot>
-{#        <tr>#}
-{#          <td colspan="3"></td>#}
-{#          <th>{{ invoice.sub_total }}</th>#}
-{#          <td class="number">المجموع</td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#          <td colspan="3"></td>#}
-{#          <th>{{ invoice.tax }} 0</th>#}
-{#          <td class="number">الضريبة</td>#}
-{#        </tr>#}
+        {#        <tr>#}
+        {#          <td colspan="3"></td>#}
+        {#          <th>{{ invoice.sub_total }}</th>#}
+        {#          <td class="number">المجموع</td>#}
+        {#        </tr>#}
+        {#        <tr>#}
+        {#          <td colspan="3"></td>#}
+        {#          <th>{{ invoice.tax }} 0</th>#}
+        {#          <td class="number">الضريبة</td>#}
+        {#        </tr>#}
         </tfoot>
       </table>
     </div>
@@ -153,7 +151,11 @@
 
   <table id="total">
     <thead>
-    <th>المجموع النهائي</th>
+    <th>
+      <b>
+        المجموع النهائي
+      </b>
+    </th>
     </thead>
     <tbody>
     <tr>

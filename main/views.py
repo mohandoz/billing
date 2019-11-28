@@ -35,6 +35,7 @@ import os
 from .utils import check_folder_exist_create
 
 from django.core.exceptions import ValidationError
+from num2words import num2words
 
 
 @login_required
@@ -334,6 +335,10 @@ class InvoicePdfView(View):
         for item in invoice_details:
             grand_total += item.total
 
+        grand_total_copy = grand_total
+
+        grand_total_words = num2words(grand_total_copy, to="currency", currency="JD", lang="ar")
+
         response = HttpResponse(content_type="application/pdf")
         response['Content-Disposition'] = f"inline; filename={invoice.invoice_number}.pdf"
 
@@ -342,6 +347,7 @@ class InvoicePdfView(View):
             'invoice': invoice,
             'invoice_details': invoice_details,
             'grand_total': grand_total,
+            'grand_total_words': grand_total_words,
 
         })
 
@@ -356,7 +362,7 @@ class InvoicePdfView(View):
         return response
 
 
-class InvoicePdfWithoutPirceًView(View):
+class InvoicePdfWithoutPriceView(View):
     def get(self, request, uid):
         invoice = get_object_or_404(Invoice, uid=uid)
         invoice_details = invoice.invoice_details.all().order_by("material")
@@ -364,6 +370,11 @@ class InvoicePdfWithoutPirceًView(View):
 
         for item in invoice_details:
             grand_total += item.total
+
+        grand_total_copy = grand_total
+
+        grand_total_words = num2words(grand_total_copy, to="currency", currency="JD" , lang="ar")
+
 
         response = HttpResponse(content_type="application/pdf")
         response['Content-Disposition'] = f"inline; filename={invoice.invoice_number}.pdf"
@@ -373,6 +384,7 @@ class InvoicePdfWithoutPirceًView(View):
             'invoice': invoice,
             'invoice_details': invoice_details,
             'grand_total': grand_total,
+            'grand_total_words': grand_total_words,
 
         })
 

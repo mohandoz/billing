@@ -30,6 +30,17 @@
                       onclick="printJS('{% url 'invoice-print-without' object.uid %}')">طباعة بدون سعر
               </button>
 
+              <th>
+                <input type="button" value="معاينة مع سعر" class="btn btn-outline-secondary command"
+                       onclick=" window.open('{% url 'invoice-preview' object.uid %}', '_blank'); return false;">
+              </th>
+
+              <th>
+                <input type="button" value="معاينة بدون سعر" class="btn btn-outline-secondary command"
+                       onclick=" window.open('{% url 'invoice-preview' object.uid %}', '_blank'); return false;">
+              </th>
+
+
 
               {% if request.user.is_superuser %}
                 <a class="btn btn-outline-secondary command" href="{% url 'invoice-update' object.uid %}">تعديل</a>
@@ -61,6 +72,17 @@
             <button class="btn btn-outline-secondary command" type="button"
                     onclick="printJS('{% url 'invoice-print-without' object.uid %}')">طباعة بدون سعر
             </button>
+
+            <th>
+              <input type="button" value="معاينة مع سعر" class="btn btn-outline-secondary command"
+                     onclick=" window.open('{% url 'invoice-preview' object.uid %}', '_blank'); return false;">
+            </th>
+
+            <th>
+              <input type="button" value="معاينة بدون سعر" class="btn btn-outline-secondary command"
+                     onclick=" window.open('{% url 'invoice-preview' object.uid %}', '_blank'); return false;">
+            </th>
+
 
             {% if request.user.is_superuser %}
               <a class="btn btn-outline-secondary command" href="{% url 'invoice-update' object.uid %}">تعديل</a>

@@ -19,6 +19,9 @@ import shutil
 
 from django.db import transaction
 
+from num2words import num2words
+
+
 class FormsetMixin(object):
     object = None
 
@@ -100,10 +103,15 @@ class InvoiceMixin(object):
         for item in invoice_details:
             grand_total += item.total
 
+        grand_total_copy = grand_total
+
+        grand_total_words = num2words(grand_total_copy, to="currency", currency="JD", lang="ar")
+
         template = render_to_string("main/weasy.html", {
             'invoice': invoice,
             'invoice_details': invoice_details,
             'grand_total': grand_total,
+            'grand_total_words': grand_total_words,
         })
 
         html = HTML(string=template)
