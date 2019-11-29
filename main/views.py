@@ -447,3 +447,6 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
     template_name = "main/user_update_app.html"
     model = USER_MODEL
     fields = ["is_active", ]
+
+
+

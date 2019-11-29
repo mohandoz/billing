@@ -32,14 +32,13 @@
 
               <th>
                 <input type="button" value="معاينة مع سعر" class="btn btn-outline-secondary command"
-                       onclick=" window.open('{% url 'invoice-preview' object.uid %}', '_blank'); return false;">
+                       onclick=" window.open('{% url 'invoice-print' object.uid %}', '_blank'); return false;">
               </th>
 
               <th>
                 <input type="button" value="معاينة بدون سعر" class="btn btn-outline-secondary command"
-                       onclick=" window.open('{% url 'invoice-preview' object.uid %}', '_blank'); return false;">
+                       onclick=" window.open('{% url 'invoice-print-without' object.uid %}', '_blank'); return false;">
               </th>
-
 
 
               {% if request.user.is_superuser %}
@@ -75,12 +74,12 @@
 
             <th>
               <input type="button" value="معاينة مع سعر" class="btn btn-outline-secondary command"
-                     onclick=" window.open('{% url 'invoice-preview' object.uid %}', '_blank'); return false;">
+                     onclick=" window.open('{% url 'invoice-print' object.uid %}', '_blank'); return false;">
             </th>
 
             <th>
               <input type="button" value="معاينة بدون سعر" class="btn btn-outline-secondary command"
-                     onclick=" window.open('{% url 'invoice-preview' object.uid %}', '_blank'); return false;">
+                     onclick=" window.open('{% url 'invoice-print-without' object.uid %}', '_blank'); return false;">
             </th>
 
 
