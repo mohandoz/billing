@@ -163,4 +163,4 @@ class InvoiceDetail(TimeStampedModel):
         super(InvoiceDetail, self).save(*args, **kwargs)
 
     class Meta:
-        ordering = ['delivery_date']
+        ordering = ("material__name","delivery_date")

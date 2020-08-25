@@ -331,7 +331,7 @@ class CompanyInvoiceListView(LoginRequiredMixin, FilteredListView):
 class InvoicePdfView(View):
     def get(self, request, uid):
         invoice = get_object_or_404(Invoice, uid=uid)
-        invoice_details = invoice.invoice_details.all().order_by("delivery_date")
+        invoice_details = invoice.invoice_details.all().order_by("material__name","delivery_date")
         grand_total = Decimal(0.0)
 
         for item in invoice_details:
@@ -367,7 +367,7 @@ class InvoicePdfView(View):
 class InvoicePdfWithoutPriceView(View):
     def get(self, request, uid):
         invoice = get_object_or_404(Invoice, uid=uid)
-        invoice_details = invoice.invoice_details.all().order_by("delivery_date")
+        invoice_details = invoice.invoice_details.all().order_by("material__name","delivery_date")
         grand_total = Decimal(0.0)
 
         for item in invoice_details:
@@ -400,7 +400,7 @@ class InvoicePdfWithoutPriceView(View):
 class InvoiceHtml(View):
     def get(self, request, uid):
         invoice = get_object_or_404(Invoice, uid=uid)
-        invoice_details = invoice.invoice_details.all().order_by("delivery_date")
+        invoice_details = invoice.invoice_details.all().order_by("material__name","delivery_date")
         grand_total = Decimal(0.0)
 
         for item in invoice_details:
