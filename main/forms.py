@@ -69,6 +69,11 @@ InvoiceDetailFormSet = inlineformset_factory(
     Invoice, InvoiceDetail, form=InvoiceDetailForm, extra=1,    validate_min=True,
     can_delete=False)
 
+#FS=inlineformset_factory(Invoice,InvoiceDetail, form=InvoiceDetailForm, extra=0,    validate_min=True,    can_delete=True)
+#InvoiceUpdateFormSet=FS(instance=Invoice,
+#           queryset=Invoice.InvoiceDetail.order_by("delivery_date")
+#          )
+
 InvoiceUpdateFormSet = inlineformset_factory(
     Invoice, InvoiceDetail, form=InvoiceDetailForm, extra=0,    validate_min=True,
     can_delete=True)

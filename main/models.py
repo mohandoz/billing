@@ -129,14 +129,17 @@ class Invoice(TimeStampedModel):
         super(Invoice, self).save(*args, **kwargs)
 
     def get_invoice_details(self):
-        return self.invoice_details.all().order_by("material")
+        return self.invoice_details.all().order_by("delivery_date")
 
 
     def get_absolute_url(self):
         return reverse("invoice-detail", args=[str(self.uid)])
+        
 
     def __str__(self):
         return f"{self.branch.name} - {self.invoice_number}"
+       
+
 
 
 class InvoiceDetail(TimeStampedModel):
@@ -160,4 +163,4 @@ class InvoiceDetail(TimeStampedModel):
         super(InvoiceDetail, self).save(*args, **kwargs)
 
     class Meta:
-        ordering = ['material']
+        ordering = ['delivery_date']

@@ -64,7 +64,7 @@
       </thead>
       <tbody>
       {{ invoice.invoicedetails_set.all }}
-      {% for detail in invoice.invoice_details.all %}
+      {% for detail in invoice_details %}
         <tr>
           <td class="rownum"></td>
 

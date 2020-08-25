@@ -222,7 +222,7 @@ class InvoiceCreateView(LoginRequiredMixin, InvoiceMixin, FormsetMixin, generic.
 
 
 
-class InvoiceDetailView(generic.DetailView):
+class InvoiceDetailView(LoginRequiredMixin, generic.DetailView):
     model = Invoice
     fields = ["invoice_number", ]
 
@@ -237,13 +237,15 @@ class InvoiceDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(InvoiceDetailView, self).get_context_data(**kwargs)
-        items = self.invoice.invoice_details.all().order_by("-created")
+        items = self.invoice.invoice_details.all().order_by("delivery_date")
         grand_total = Decimal(0.0)
 
         for item in items:
             grand_total += item.total
 
         context['grand_total'] = grand_total
+        context['items'] = items
+
         return context
 
 
@@ -329,7 +331,7 @@ class CompanyInvoiceListView(LoginRequiredMixin, FilteredListView):
 class InvoicePdfView(View):
     def get(self, request, uid):
         invoice = get_object_or_404(Invoice, uid=uid)
-        invoice_details = invoice.invoice_details.all().order_by("create_at")
+        invoice_details = invoice.invoice_details.all().order_by("delivery_date")
         grand_total = Decimal(0.0)
 
         for item in invoice_details:
@@ -365,7 +367,7 @@ class InvoicePdfView(View):
 class InvoicePdfWithoutPriceView(View):
     def get(self, request, uid):
         invoice = get_object_or_404(Invoice, uid=uid)
-        invoice_details = invoice.invoice_details.all().order_by("-created")
+        invoice_details = invoice.invoice_details.all().order_by("delivery_date")
         grand_total = Decimal(0.0)
 
         for item in invoice_details:
@@ -398,7 +400,7 @@ class InvoicePdfWithoutPriceView(View):
 class InvoiceHtml(View):
     def get(self, request, uid):
         invoice = get_object_or_404(Invoice, uid=uid)
-        invoice_details = invoice.invoice_details.all()
+        invoice_details = invoice.invoice_details.all().order_by("delivery_date")
         grand_total = Decimal(0.0)
 
         for item in invoice_details:
