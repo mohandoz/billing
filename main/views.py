@@ -220,7 +220,7 @@ class InvoiceCreateView(LoginRequiredMixin, InvoiceMixin, FormsetMixin, generic.
         context['company'] = company
         return context
 
-    
+
 
 class InvoiceDetailView(generic.DetailView):
     model = Invoice
@@ -237,7 +237,7 @@ class InvoiceDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(InvoiceDetailView, self).get_context_data(**kwargs)
-        items = self.invoice.invoice_details.all().order_by("material__name")
+        items = self.invoice.invoice_details.all().order_by("-created")
         grand_total = Decimal(0.0)
 
         for item in items:
@@ -329,7 +329,7 @@ class CompanyInvoiceListView(LoginRequiredMixin, FilteredListView):
 class InvoicePdfView(View):
     def get(self, request, uid):
         invoice = get_object_or_404(Invoice, uid=uid)
-        invoice_details = invoice.invoice_details.all().order_by("material")
+        invoice_details = invoice.invoice_details.all().order_by("create_at")
         grand_total = Decimal(0.0)
 
         for item in invoice_details:
@@ -365,7 +365,7 @@ class InvoicePdfView(View):
 class InvoicePdfWithoutPriceView(View):
     def get(self, request, uid):
         invoice = get_object_or_404(Invoice, uid=uid)
-        invoice_details = invoice.invoice_details.all().order_by("material")
+        invoice_details = invoice.invoice_details.all().order_by("-created")
         grand_total = Decimal(0.0)
 
         for item in invoice_details:
